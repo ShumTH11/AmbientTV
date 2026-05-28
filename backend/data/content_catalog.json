@@ -1,0 +1,180 @@
+{
+  "version": 2,
+  "categories": [
+    {
+      "id": "nature",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/4763824/4763824-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/01.%20Rebirth%20Yoga%20Music%20Academy%20-%20Deep%20Meditation%20(Morning%20Birds%2C%20Waterfall).mp3",
+          "title": "Forest Morning — Deep Meditation (Morning Birds, Waterfall)",
+          "tags": [
+            {"key": "mood", "value": "calm"},
+            {"key": "genre", "value": "ambient"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/4763824/4763824-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/02.%20Calming%20Music%20Sanctuary%20-%20Yoga%20Infinity%20Journey.mp3",
+          "title": "Forest Morning — Yoga Infinity Journey",
+          "tags": [
+            {"key": "mood", "value": "calm"},
+            {"key": "genre", "value": "ambient"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/4763824/4763824-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/03.%20Om%20Meditation%20Music%20Academy%20-%20Bali%20Spa%20(Music%20for%20Massage).mp3",
+          "title": "Forest Morning — Bali Spa (Music for Massage)",
+          "tags": [
+            {"key": "mood", "value": "calm"},
+            {"key": "genre", "value": "ambient"},
+            {"key": "duration", "value": "long"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069166/18069166-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/01.%20%20Tranquility%20Spa%20Universe%20%20-%20%20Physical%20Therapy.mp3",
+          "title": "Neon City — Physical Therapy",
+          "tags": [
+            {"key": "mood", "value": "dark"},
+            {"key": "genre", "value": "synthwave"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069166/18069166-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/02.%20%20Meditation%20Music%20Zone%20%20-%20%20Anti%20Stress.mp3",
+          "title": "Neon City — Anti Stress",
+          "tags": [
+            {"key": "mood", "value": "dark"},
+            {"key": "genre", "value": "synthwave"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069166/18069166-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/03.%20%20Relaxation%20Meditation%20Songs%20Divine%20%20-%20%20Relief%20From%20Stress.mp3",
+          "title": "Neon City — Relief From Stress",
+          "tags": [
+            {"key": "mood", "value": "dark"},
+            {"key": "genre", "value": "synthwave"},
+            {"key": "duration", "value": "long"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1550080/1550080-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_10_-_Tone_Poetry_E52E62AA-6353-44AE-BA40-2AE6AD7F1776.mp3",
+          "title": "Winter Lights — Tone Poetry",
+          "tags": [
+            {"key": "mood", "value": "festive"},
+            {"key": "genre", "value": "christmas"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1550080/1550080-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_11_-_The_Healing_Lake_8BE609A8-7115-4273-8A1A-CE5738459E7A.mp3",
+          "title": "Winter Lights — The Healing Lake",
+          "tags": [
+            {"key": "mood", "value": "festive"},
+            {"key": "genre", "value": "christmas"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1550080/1550080-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_12_-_It_Was_Beautiful_A8151772-9133-4709-8419-D74050521F15.mp3",
+          "title": "Winter Lights — It Was Beautiful",
+          "tags": [
+            {"key": "mood", "value": "festive"},
+            {"key": "genre", "value": "christmas"},
+            {"key": "duration", "value": "long"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fantasy",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1860076/1860076-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Conditioner_A.mp3",
+          "title": "Epic Castle — Air Conditioner A (Deep Sleep)",
+          "tags": [
+            {"key": "mood", "value": "epic"},
+            {"key": "genre", "value": "orchestral"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1860076/1860076-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Conditioner_B.mp3",
+          "title": "Epic Castle — Air Conditioner B (Deep Sleep)",
+          "tags": [
+            {"key": "mood", "value": "epic"},
+            {"key": "genre", "value": "orchestral"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/1860076/1860076-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Fan_Deep.mp3",
+          "title": "Epic Castle — Air Fan Deep (Deep Sleep)",
+          "tags": [
+            {"key": "mood", "value": "epic"},
+            {"key": "genre", "value": "orchestral"},
+            {"key": "duration", "value": "long"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steampunk",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069578/18069578-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/ca015_va_cs/101.Etat_Des_Stocks_Klassikkos.mp3",
+          "title": "Industrial Gears — Etat Des Stocks",
+          "tags": [
+            {"key": "mood", "value": "industrial"},
+            {"key": "genre", "value": "steampunk"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069578/18069578-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/ca015_va_cs/101.Etat_Des_Stocks_Klassikkos_vbr.mp3",
+          "title": "Industrial Gears — Etat Des Stocks (VBR)",
+          "tags": [
+            {"key": "mood", "value": "industrial"},
+            {"key": "genre", "value": "steampunk"},
+            {"key": "duration", "value": "long"}
+          ]
+        },
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/18069578/18069578-uhd_2560_1440_24fps.mp4",
+          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/04.%20%20Yoga%20Music%20%20-%20%20Healing%20Hands.mp3",
+          "title": "Industrial Gears — Healing Hands",
+          "tags": [
+            {"key": "mood", "value": "industrial"},
+            {"key": "genre", "value": "steampunk"},
+            {"key": "duration", "value": "long"}
+          ]
+        }
+      ]
+    }
+  ]
+}

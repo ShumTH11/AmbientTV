@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+*.lock
+package-lock.json
+yarn.lock
+
+# Environment & secrets
+.env
+*.env.local
+*.env.development
+*.env.production
+
+# Android build artifacts
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+.vscode/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Large media files (use LFS or host externally)
+*.mp4
+*.webm
+*.mov
+*.avi
+*.hprof
+
+# Uploaded/generated assets that shouldn't be in git
+backend/public/assets/videos/
+backend/public/assets/audio/
+web/assets/videos/
+web/assets/audio/

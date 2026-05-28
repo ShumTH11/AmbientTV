@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "providers": [
+    {
+      "provider": "SUNO",
+      "apiKey": null,
+      "baseUrl": "https://api.suno.ai",
+      "timeoutMs": 30000,
+      "enabled": false
+    },
+    {
+      "provider": "MUSICGEN",
+      "apiKey": null,
+      "baseUrl": "https://api.musicgen.ai",
+      "timeoutMs": 30000,
+      "enabled": false
+    },
+    {
+      "provider": "STABLE_AUDIO",
+      "apiKey": null,
+      "baseUrl": "https://api.stability.ai/v1/audio",
+      "timeoutMs": 30000,
+      "enabled": false
+    },
+    {
+      "provider": "RUNWAY",
+      "apiKey": null,
+      "baseUrl": "https://api.runwayml.com/v1",
+      "timeoutMs": 30000,
+      "enabled": false
+    },
+    {
+      "provider": "STABLE_VIDEO",
+      "apiKey": null,
+      "baseUrl": "https://api.stability.ai/v1/video",
+      "timeoutMs": 30000,
+      "enabled": false
+    },
+    {
+      "provider": "PIKA",
+      "apiKey": null,
+      "baseUrl": "https://api.pika.art",
+      "timeoutMs": 30000,
+      "enabled": false
+    }
+  ]
+}

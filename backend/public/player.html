@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050508">
+<title>AmbientTV Player</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body class="player-body">
+
+<div id="playerOverlay" class="player-overlay">
+  <!-- Video with warm filter layer -->
+  <div id="videoWrap" class="video-wrap">
+    <video id="videoEl" class="video-layer" playsinline loop muted></video>
+  </div>
+
+  <!-- Main audio -->
+  <audio id="audioEl" class="audio-layer" loop crossorigin="anonymous"></audio>
+  <!-- Layered ambient audio (rain, fire, etc) -->
+  <audio id="layerAudioEl" class="audio-layer" loop crossorigin="anonymous"></audio>
+
+  <!-- Controls -->
+  <div id="controls" class="controls">
+    <div class="controls-top">
+      <button onclick="goBack()">← Назад</button>
+      <h2 id="pairTitle">Loading…</h2>
+      <div class="top-right">
+        <button id="wakeBtn" onclick="toggleWakeLock()" title="Keep screen on">🖥️</button>
+        <button id="favBtn" onclick="toggleFavorite()">♡</button>
+      </div>
+    </div>
+
+    <div class="controls-center">
+      <button onclick="prevPair()">⏮</button>
+      <button id="playBtn" onclick="togglePlay()">⏸</button>
+      <button onclick="nextPair()">⏭</button>
+    </div>
+
+    <div class="controls-bottom">
+      <div class="progress-row">
+        <span id="curTime">0:00</span>
+        <input type="range" id="seekBar" value="0" min="0" max="100" step="0.1">
+        <span id="durTime">0:00</span>
+      </div>
+
+      <!-- Extended controls -->
+      <div class="extended-controls">
+        <div class="ext-row">
+          <label>🔆 Warm Filter</label>
+          <input type="range" id="warmFilter" min="0" max="100" value="0" title="Warm screen filter">
+        </div>
+        <div class="ext-row">
+          <label>🌧️ Layer</label>
+          <select id="layerSelect" onchange="changeLayerSound()">
+            <option value="">None</option>
+            <option value="https://archive.org/download/hqmghlufr4foahes3rwftsguy3kvijw6ny3lqy3k/6ussrt6ilgvqhtu-https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-05-17%2Fb3afffdbdb1a195ca839957d510d6407.m4a">Rain</option>
+            <option value="https://archive.org/download/aporee_9093_10958/ugnis.mp3">Fireplace</option>
+            <option value="https://archive.org/download/aporee_50091_57141/soundmap2020062950.mp3">Train</option>
+            <option value="https://archive.org/download/qujoncjeklpn7ifmuqswu6ejqclqxdxvbaxsm7ak/hz3pfy8jfproiqo-ellis-hadlock-music-is-on-air.mp3">Ambient</option>
+          </select>
+          <input type="range" id="layerVol" min="0" max="100" value="30" title="Layer volume">
+        </div>
+      </div>
+
+      <div class="info-row">
+        <span id="categoryName">-</span>
+        <div>
+          <span id="volBadge" class="badge">🔊 <span id="volDisplay">80%</span></span>
+          <span id="sleepBadge" class="badge hidden">🌙 <span id="sleepTime">0:00</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sleep overlay -->
+  <div id="sleepOverlay" class="sleep-overlay hidden">
+    <div>💤 Таймер сна</div>
+    <div id="sleepCountdown">00:00</div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Auto-hide hint -->
+  <div id="uiHint" class="ui-hint hidden">Движение мыши или любая клавиша — показать интерфейс</div>
+</div>
+
+<script src="js/config.js?v=3"></script>
+<script src="js/api.js?v=3"></script>
+<script src="js/player.js?v=3"></script>
+<script>
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>

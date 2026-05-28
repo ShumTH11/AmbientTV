@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "nature",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/10557941/10557941-hd_1920_1080_30fps.mp4",
+          "audioUrl": "https://archive.org/download/mir001/mir001-mortesium-01-dream_state.mp3",
+          "title": "Tiny Waterfalls On Stream",
+          "tags": [
+            {
+              "key": "mood",
+              "value": "calm"
+            },
+            {
+              "key": "genre",
+              "value": "ambient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/32822471/13990566_1920_1080_24fps.mp4",
+          "audioUrl": "https://archive.org/download/Home-Odyssey/Home-Odyssey-01Intro.mp3",
+          "title": "Futuristic Cyberpunk Neon Cityscape",
+          "tags": [
+            {
+              "key": "mood",
+              "value": "dark"
+            },
+            {
+              "key": "genre",
+              "value": "synthwave"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/6029491/6029491-hd_1920_1080_25fps.mp4",
+          "audioUrl": "https://archive.org/download/NS050/01-NS050-Multi-Panel_Christmas-With-Mr-Rice.mp3",
+          "title": "Close Up Video Of A Christmas Tree With Snow",
+          "tags": [
+            {
+              "key": "mood",
+              "value": "festive"
+            },
+            {
+              "key": "genre",
+              "value": "christmas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fantasy",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/5608244/5608244-hd_1920_1080_30fps.mp4",
+          "audioUrl": "https://archive.org/download/movies_20191031/Alfred Hitchcock Matilde Shaw EQ.mp3",
+          "title": "The Ludwig Castle In The Alps Of Germany",
+          "tags": [
+            {
+              "key": "mood",
+              "value": "epic"
+            },
+            {
+              "key": "genre",
+              "value": "orchestral"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steampunk",
+      "pairs": [
+        {
+          "videoUrl": "https://videos.pexels.com/video-files/6258803/6258803-hd_1920_1080_25fps.mp4",
+          "audioUrl": "https://archive.org/download/cior-138-gas-mask-dolls-first-time-in-the-war-ep/01 - The Mask Usage.mp3",
+          "title": "Magician Up In Smoke",
+          "tags": [
+            {
+              "key": "mood",
+              "value": "industrial"
+            },
+            {
+              "key": "genre",
+              "value": "steampunk"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
