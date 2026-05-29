@@ -1,0 +1,17 @@
+# Railway Deploy Configuration
+# https://docs.railway.app/deploy/config-as-code
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "backend/Dockerfile"
+
+[deploy]
+startCommand = "node server.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[nixpacks]
+# Alternative: use Nixpacks instead of Dockerfile
+# Railway auto-detects Node.js if package.json exists
