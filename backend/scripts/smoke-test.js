@@ -3,7 +3,8 @@ const http = require('http');
 
 // Test environment
 process.env.APP_SECRET = 'test_secret';
-process.env.ADMIN_PASSWORD = 'test_admin';
+process.env.ADMIN_PASSWORD_HASH = require('bcryptjs').hashSync('admin123', 10);
+process.env.ALLOWED_ORIGINS = 'http://localhost:3999';
 process.env.PORT = '3999';
 
 const server = spawn('node', ['server.js'], { cwd: __dirname + '/..' });

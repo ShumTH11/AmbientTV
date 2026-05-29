@@ -5,7 +5,7 @@
 ```
 ┌─────────────┐      HTTPS       ┌─────────────────────────────┐      HTTPS      ┌──────────────┐
 │  Android TV │  ─────────────►  │  Node.js Backend (Fly.io)   │  ────────────►  │  Pexels API  │
-│             │   Bearer Token   │  • Holds all API keys       │                 │  YouTube API │
+│             │   httpOnly Cookie │  • Holds all API keys       │                 │  YouTube API │
 │  (no keys)  │                  │  • Enforces auth            │                 │  Pixabay API │
 └─────────────┘                  │  • Proxies search           │                 │  Coverr API  │
                                  └─────────────────────────────┘                 └──────────────┘
@@ -26,10 +26,17 @@
 Edit `backend/.env` (already done in repo):
 ```env
 APP_SECRET=atv_prod_2026_4f8a9b2c1d3e5f6a7b8c9d0e1f2a3b4c
+ADMIN_PASSWORD_HASH=$2b$10$...  # bcrypt hash of your admin password
+ALLOWED_ORIGINS=https://yourdomain.com,http://localhost:3000
 PEXELS_API_KEY=your_key
 PIXABAY_API_KEY=your_key
 YOUTUBE_API_KEY=your_key
 COVERR_API_KEY=your_key
+```
+
+**Generate admin password hash:**
+```bash
+node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('your_admin_password', 10));"
 ```
 
 **IMPORTANT:** Rotate `APP_SECRET` before production. Do **not** reuse the example token.
@@ -100,6 +107,8 @@ flyctl launch --name ambienttv-backend --region waw --no-deploy
 
 # Set secrets (never commit .env to git!)
 flyctl secrets set APP_SECRET=atv_prod_2026_4f8a9b2c1d3e5f6a7b8c9d0e1f2a3b4c
+flyctl secrets set ADMIN_PASSWORD_HASH='$2b$10$...'
+flyctl secrets set ALLOWED_ORIGINS='https://yourdomain.com,https://ambienttv-backend.fly.dev'
 flyctl secrets set PEXELS_API_KEY=your_key
 flyctl secrets set PIXABAY_API_KEY=your_key
 flyctl secrets set YOUTUBE_API_KEY=your_key

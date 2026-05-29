@@ -47,6 +47,14 @@ dependencies {
     // Media compat for notification styling
     implementation(libs.media)
 
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
+
     // TarsosDSP audio analysis (BPM / key detection)
     implementation("be.tarsos.dsp:core:2.5")
     implementation("be.tarsos.dsp:jvm:2.5")

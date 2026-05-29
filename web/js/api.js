@@ -2,16 +2,11 @@
  * AmbientTV Web API Layer
  */
 
-function authHeaders() {
-  const token = CONFIG.getToken();
-  return token ? { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
-}
-
 async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { ...options, signal: ctrl.signal });
+    const res = await fetch(url, { ...options, signal: ctrl.signal, credentials: 'include' });
     clearTimeout(timer);
     return res;
   } catch (e) {
@@ -32,7 +27,7 @@ async function retryFetch(url, options, retries = 3, delay = 500) {
 }
 
 async function apiGet(path) {
-  const res = await retryFetch(`${CONFIG.API_BASE}${path}`, { headers: authHeaders() });
+  const res = await retryFetch(`${CONFIG.API_BASE}${path}`, {});
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
@@ -40,7 +35,7 @@ async function apiGet(path) {
 async function apiPost(path, body) {
   const res = await retryFetch(`${CONFIG.API_BASE}${path}`, {
     method: 'POST',
-    headers: authHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
   if (!res.ok) {
@@ -53,7 +48,7 @@ async function apiPost(path, body) {
 async function apiDelete(path, body) {
   const res = await retryFetch(`${CONFIG.API_BASE}${path}`, {
     method: 'DELETE',
-    headers: authHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -76,6 +71,9 @@ async function apiRegister(email, password, name) {
 async function apiLogin(email, password) {
   return apiPost('/api/auth/login', { email, password });
 }
+async function apiLogout() {
+  return apiPost('/api/auth/logout', {});
+}
 async function apiProfile() {
   return apiGet('/api/auth/profile');
 }
@@ -95,4 +93,11 @@ async function apiGetHistory() {
 }
 async function apiAddHistory(item) {
   return apiPost('/api/user/history', item);
+}
+
+// Search: Pixabay audio (royalty-free music & sound effects)
+async function apiSearchPixabayAudio(query, per_page = 10, type = 'music') {
+  const res = await retryFetch(`${CONFIG.API_BASE}/api/search/pixabay-audio?query=${encodeURIComponent(query)}&per_page=${per_page}&type=${type}`, {});
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
 }

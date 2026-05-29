@@ -7,8 +7,12 @@ function generateToken(userId) {
 }
 
 function requireUser(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  // Try cookie first, then Authorization header
+  let token = req.cookies && req.cookies.atv_token;
+  if (!token) {
+    const authHeader = req.headers['authorization'];
+    token = authHeader && authHeader.split(' ')[1];
+  }
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized', detail: 'Missing token' });

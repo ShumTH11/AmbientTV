@@ -32,16 +32,14 @@ async function initApp() {
   if (!currentCatalog) throw lastErr || new Error('Не удалось загрузить каталог');
   categories = currentCatalog.categories || [];
 
-  // Check auth
-  if (CONFIG.isLoggedIn()) {
-    try {
-      const profile = await apiProfile();
-      currentUser = profile;
-      updateUserBadge();
-      await syncFromServer();
-    } catch (e) {
-      CONFIG.clearToken();
-    }
+  // Check auth via cookie (server-side)
+  try {
+    const profile = await apiProfile();
+    currentUser = profile;
+    updateUserBadge();
+    await syncFromServer();
+  } catch (e) {
+    currentUser = null;
   }
 
   // UI
@@ -63,7 +61,7 @@ async function initApp() {
 
 function toggleAuthModal() {
   const modal = document.getElementById('authModal');
-  if (CONFIG.isLoggedIn()) {
+  if (currentUser) {
     showSection('profile');
     return;
   }
@@ -85,7 +83,6 @@ async function doLogin() {
   document.getElementById('authError').textContent = '';
   try {
     const res = await apiLogin(email, password);
-    CONFIG.setToken(res.token);
     currentUser = res.user;
     document.getElementById('authModal').classList.add('hidden');
     updateUserBadge();
@@ -105,7 +102,6 @@ async function doRegister() {
   document.getElementById('authError').textContent = '';
   try {
     const res = await apiRegister(email, password, name);
-    CONFIG.setToken(res.token);
     currentUser = res.user;
     document.getElementById('authModal').classList.add('hidden');
     updateUserBadge();
@@ -129,8 +125,10 @@ function updateUserBadge() {
   }
 }
 
-function logout() {
-  CONFIG.clearToken();
+async function logout() {
+  try {
+    await apiLogout();
+  } catch (e) {}
   currentUser = null;
   localStorage.removeItem('atv_favorites');
   localStorage.removeItem('atv_history');
@@ -143,7 +141,7 @@ function logout() {
 
 // Sync from server
 async function syncFromServer() {
-  if (!CONFIG.isLoggedIn()) return;
+  if (!currentUser) return;
   try {
     const [favs, hist] = await Promise.all([apiGetFavorites(), apiGetHistory()]);
     localStorage.setItem('atv_favorites', JSON.stringify(favs.map(f => ({

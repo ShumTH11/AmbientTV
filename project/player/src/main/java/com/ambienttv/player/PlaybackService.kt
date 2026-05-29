@@ -211,32 +211,6 @@ class PlaybackService : MediaLibraryService() {
     private fun createPlaybackNotification(): Notification {
         val pendingIntent = getSessionPendingIntent()
 
-        val pauseIntent = PendingIntent.getService(
-            this,
-            1,
-            Intent(this, PlaybackService::class.java).apply {
-                action = ACTION_PAUSE
-            },
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        )
-
-        val playIntent = PendingIntent.getService(
-            this,
-            2,
-            Intent(this, PlaybackService::class.java).apply {
-                action = ACTION_PLAY
-            },
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        )
-
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("AmbientTV")
             .setContentText("Playing ambient content")
@@ -245,21 +219,6 @@ class PlaybackService : MediaLibraryService() {
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setSilent(true)
-            .addAction(
-                android.R.drawable.ic_media_pause,
-                "Pause",
-                pauseIntent
-            )
-            .addAction(
-                android.R.drawable.ic_media_play,
-                "Play",
-                playIntent
-            )
-            .setStyle(
-                androidx.media.app.NotificationCompat.MediaStyle()
-                    .setShowActionsInCompactView(0, 1)
-                    .setMediaSession(mediaLibrarySession?.sessionCompatToken)
-            )
             .build()
     }
 

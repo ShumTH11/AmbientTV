@@ -2,7 +2,7 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(path.join(__dirname, 'player.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'player.html'), 'utf8');
 
 const dom = new JSDOM(html, {
   url: 'http://localhost:3000/player.html?category=nature',
@@ -20,13 +20,13 @@ window.onerror = (msg, url, line, col, err) => {
 };
 
 // Load config.js
-const configJs = fs.readFileSync(path.join(__dirname, 'js', 'config.js'), 'utf8');
+const configJs = fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'js', 'config.js'), 'utf8');
 const scriptConfig = document.createElement('script');
 scriptConfig.textContent = configJs;
 document.head.appendChild(scriptConfig);
 
 // Load api.js
-const apiJs = fs.readFileSync(path.join(__dirname, 'js', 'api.js'), 'utf8');
+const apiJs = fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'js', 'api.js'), 'utf8');
 const scriptApi = document.createElement('script');
 scriptApi.textContent = apiJs;
 document.head.appendChild(scriptApi);
@@ -48,7 +48,7 @@ global.fetch = (url) => {
 };
 
 // Load player.js
-const playerJs = fs.readFileSync(path.join(__dirname, 'js', 'player.js'), 'utf8');
+const playerJs = fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'js', 'player.js'), 'utf8');
 const scriptPlayer = document.createElement('script');
 scriptPlayer.textContent = playerJs;
 document.head.appendChild(scriptPlayer);

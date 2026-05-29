@@ -56,3 +56,13 @@ backend/public/assets/videos/
 backend/public/assets/audio/
 web/assets/videos/
 web/assets/audio/
+
+# Database files (user data, auto-generated)
+backend/data/*.db
+backend/data/*.db-journal
+backend/data/*.db-shm
+backend/data/*.db-wal
+
+# Scraper temp files
+temp_coverr.html
+

@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -7,10 +8,18 @@ const CATALOG_PATH = path.join(__dirname, '..', 'data', 'content_catalog.json');
 
 let writePromise = null; // serialize writes
 
+// Admin auth using bcrypt-hashed password (set ADMIN_PASSWORD_HASH env var)
 function requireAdmin(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token || token !== process.env.ADMIN_PASSWORD) {
+  const adminHash = process.env.ADMIN_PASSWORD_HASH;
+  
+  if (!token || !adminHash) {
+    return res.status(401).json({ error: 'Unauthorized', detail: 'Invalid or missing admin token' });
+  }
+  
+  const valid = bcrypt.compareSync(token, adminHash);
+  if (!valid) {
     return res.status(401).json({ error: 'Unauthorized', detail: 'Invalid or missing admin token' });
   }
   next();

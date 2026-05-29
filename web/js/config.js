@@ -3,8 +3,5 @@
  */
 const CONFIG = {
   API_BASE: '', // same origin
-  getToken() { return localStorage.getItem('atv_jwt') || ''; },
-  setToken(t) { localStorage.setItem('atv_jwt', t); },
-  clearToken() { localStorage.removeItem('atv_jwt'); },
-  isLoggedIn() { return !!this.getToken(); }
+  isLoggedIn() { return false; } // server-side check via /api/auth/profile
 };

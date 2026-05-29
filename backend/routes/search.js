@@ -1,5 +1,4 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const cache = require('../cache');
 const router = express.Router();
 
@@ -72,6 +71,20 @@ router.get('/pixabay', async (req, res) => {
   const cacheKey = `pixabay:${query}:${per_page}`;
   await cachedProxy(req, res, cacheKey, async () => {
     const url = `https://pixabay.com/api/videos/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&per_page=${per_page}`;
+    const response = await fetchWithRetry(url);
+    return response.json();
+  });
+});
+
+// Pixabay Audio — royalty-free music & sound effects
+router.get('/pixabay-audio', async (req, res) => {
+  const { query, per_page = 10, type = 'music' } = req.query;
+  if (!query) return res.status(400).json({ error: 'Missing query' });
+
+  const cacheKey = `pixabay-audio:${query}:${per_page}:${type}`;
+  await cachedProxy(req, res, cacheKey, async () => {
+    // Pixabay audio API: https://pixabay.com/api/audio/
+    const url = `https://pixabay.com/api/audio/?key=${KEYS.pixabay}&q=${encodeURIComponent(query)}&per_page=${per_page}&type=${type}`;
     const response = await fetchWithRetry(url);
     return response.json();
   });

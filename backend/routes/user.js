@@ -1,9 +1,13 @@
 const express = require('express');
 const db = require('../database');
 const { requireUser } = require('../middleware/jwt');
+const { sanitizeBody } = require('../middleware/sanitize');
 
 const router = express.Router();
 router.use(requireUser);
+
+// Apply input sanitization to all body routes
+router.use(sanitizeBody);
 
 // ========== FAVORITES ==========
 
