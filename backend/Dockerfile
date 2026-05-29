@@ -1,19 +1,17 @@
-# AmbientTV Backend — production Docker image
-# Uses Node.js 20 Alpine for minimal size
-
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy dependency manifests and install
+# Install dependencies
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci --only=production
 
-# Copy application code
+# Copy app
 COPY . .
 
-# Expose the port defined in server.js / .env
+# Create data directories
+RUN mkdir -p data backups
+
 EXPOSE 3000
 
-# Run the server
 CMD ["node", "server.js"]
