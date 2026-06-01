@@ -136,6 +136,13 @@ function loadPair(pair, cat) {
   recordHistory(pair, cat || category);
   populateAudioSelect();
   populateVideoSelect();
+  // Show audio select container only if there are multiple audio tracks for this video
+  const audioSelectContainer = document.querySelector('.ext-row:has(#audioSelect)');
+  if (audioSelectContainer) {
+    const currentVideo = normalizeUrl(videoEl.src);
+    const audioCount = pairs.filter(p => normalizeUrl(p.videoUrl) === currentVideo).length;
+    audioSelectContainer.style.display = audioCount > 1 ? 'flex' : 'none';
+  }
 }
 
 function normalizeUrl(url) {
@@ -147,11 +154,12 @@ function populateAudioSelect() {
   if (!sel || !category || !pairs.length) return;
   const currentAudio = normalizeUrl(audioEl.src);
 
-  // Собираем уникальные аудио треки
+  // Собираем уникальные аудио треки для текущего видео
+  const currentVideo = normalizeUrl(videoEl.src);
   const uniqueAudios = [];
   const seen = new Set();
   pairs.forEach((p, i) => {
-    if (!seen.has(p.audioUrl)) {
+    if (normalizeUrl(p.videoUrl) === currentVideo && !seen.has(p.audioUrl)) {
       seen.add(p.audioUrl);
       const audioTitle = p.title.includes('—') ? p.title.split('—')[1].trim() : p.title;
       uniqueAudios.push({ url: p.audioUrl, title: audioTitle, idx: i });
@@ -187,6 +195,13 @@ function changeAudioTrack() {
     audioEl.play().catch(() => {});
   }
   populateAudioSelect();
+  // Refresh audio select visibility after change
+  const audioSelectContainer = document.querySelector('.ext-row:has(#audioSelect)');
+  if (audioSelectContainer) {
+    const currentVideo = normalizeUrl(videoEl.src);
+    const audioCount = pairs.filter(p => normalizeUrl(p.videoUrl) === currentVideo).length;
+    audioSelectContainer.style.display = audioCount > 1 ? 'flex' : 'none';
+  }
 }
 
 function populateVideoSelect() {
@@ -222,6 +237,14 @@ function changeVideoTrack() {
   currentPair = newPair;
   currentIndex = idx;
   populateVideoSelect();
+  populateAudioSelect();
+  // Refresh audio select visibility after video change
+  const audioSelectContainer = document.querySelector('.ext-row:has(#audioSelect)');
+  if (audioSelectContainer) {
+    const currentVideo = normalizeUrl(videoEl.src);
+    const audioCount = pairs.filter(p => normalizeUrl(p.videoUrl) === currentVideo).length;
+    audioSelectContainer.style.display = audioCount > 1 ? 'flex' : 'none';
+  }
 }
 
 function setAsDefault() {
@@ -409,6 +432,13 @@ async function nextPair() {
       document.getElementById('pairTitle').textContent = nextPair.title || 'Без названия';
       populateAudioSelect();
       updateMediaSession();
+      // Refresh audio select visibility
+      const audioSelectContainer = document.querySelector('.ext-row:has(#audioSelect)');
+      if (audioSelectContainer) {
+        const currentVideo = normalizeUrl(videoEl.src);
+        const audioCount = pairs.filter(p => normalizeUrl(p.videoUrl) === currentVideo).length;
+        audioSelectContainer.style.display = audioCount > 1 ? 'flex' : 'none';
+      }
       return;
     }
   }
@@ -447,6 +477,13 @@ async function prevPair() {
       document.getElementById('pairTitle').textContent = prevPair.title || 'Без названия';
       populateAudioSelect();
       updateMediaSession();
+      // Refresh audio select visibility
+      const audioSelectContainer = document.querySelector('.ext-row:has(#audioSelect)');
+      if (audioSelectContainer) {
+        const currentVideo = normalizeUrl(videoEl.src);
+        const audioCount = pairs.filter(p => normalizeUrl(p.videoUrl) === currentVideo).length;
+        audioSelectContainer.style.display = audioCount > 1 ? 'flex' : 'none';
+      }
       return;
     }
   }
