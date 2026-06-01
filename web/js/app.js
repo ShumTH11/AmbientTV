@@ -84,6 +84,23 @@ function renderMediaStatus() {
   }
 }
 
+// ========== MODAL CLOSE ON BACKDROP CLICK ==========
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  });
+});
+
+// ========== KEYBOARD SHORTCUTS HELP ==========
+function toggleShortcutHelp() {
+  const modal = document.getElementById('shortcutsModal');
+  if (modal) modal.classList.toggle('hidden');
+}
+
 // ========== AUTH ==========
 
 function toggleAuthModal() {

@@ -12,7 +12,8 @@
 
 <!-- Auth Modal -->
 <div id="authModal" class="modal hidden">
-  <div class="modal-box" style="max-width:400px">
+  <div class="modal-box" style="max-width:400px; position:relative">
+    <button onclick="toggleAuthModal()" class="modal-close-btn" title="Закрыть">✕</button>
     <h2 id="authTitle">🔐 Вход</h2>
     <div id="authTabs">
       <button class="tab-btn active" onclick="switchAuthTab('login')" id="tab-login">Вход</button>
@@ -173,11 +174,35 @@
     <span>AmbientTV</span>
     <span style="color:#475569">•</span>
     <a href="/admin" target="_blank">Admin</a>
-  </footer>
+  </div>
 </div>
 
+<!-- Toast -->
 <div id="toast"></div>
 
+<!-- Keyboard Shortcuts Help Modal -->
+<div id="shortcutsModal" class="modal hidden">
+  <div class="modal-box" style="max-width:500px; position:relative">
+    <button onclick="toggleShortcutHelp()" class="modal-close-btn" title="Закрыть">✕</button>
+    <h2>⌨️ Горячие клавиши</h2>
+    <div style="display:grid; grid-template-columns: auto 1fr; gap:8px 16px; margin-top:16px; font-size:14px">
+      <div style="color:#7dd3fc; font-weight:700">Space</div><div>Воспроизведение / Пауза</div>
+      <div style="color:#7dd3fc; font-weight:700">← →</div><div>Предыдущий / Следующий трек</div>
+      <div style="color:#7dd3fc; font-weight:700">↑ ↓</div><div>Громкость +/-</div>
+      <div style="color:#7dd3fc; font-weight:700">F</div><div>Полноэкранный режим</div>
+      <div style="color:#7dd3fc; font-weight:700">M</div><div>Вкл/выкл звук</div>
+      <div style="color:#7dd3fc; font-weight:700">N</div><div>Следующая категория</div>
+      <div style="color:#7dd3fc; font-weight:700">P</div><div>Предыдущая категория</div>
+      <div style="color:#7dd3fc; font-weight:700">R</div><div>Повтор вкл/выкл</div>
+      <div style="color:#7dd3fc; font-weight:700">S</div><div>Перемешать (Shuffle)</div>
+      <div style="color:#7dd3fc; font-weight:700">D</div><div>Auto-DJ вкл/выкл</div>
+      <div style="color:#7dd3fc; font-weight:700">I</div><div>Picture-in-Picture</div>
+      <div style="color:#7dd3fc; font-weight:700">H</div><div>Скрыть/показать интерфейс</div>
+      <div style="color:#7dd3fc; font-weight:700">0-9</div><div>Перемотка на 0%-90%</div>
+      <div style="color:#7dd3fc; font-weight:700">Esc</div><div>Выйти из полноэкранного / Закрыть модал</div>
+    </div>
+  </div>
+</div>
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
 <script src="js/app.js?v=7"></script>

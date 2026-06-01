@@ -49,6 +49,46 @@ body {
 .modal-box button:hover { background: #0284c7; }
 .error-text { color: #ef4444; font-size: 13px; margin-top: 8px; }
 
+/* Modal close button */
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  z-index: 10;
+}
+.modal-close-btn:hover {
+  background: rgba(239,68,68,0.2);
+  border-color: rgba(239,68,68,0.4);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+body.light-theme .modal-close-btn {
+  background: rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.1);
+  color: #64748b;
+}
+body.light-theme .modal-close-btn:hover {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.3);
+  color: #dc2626;
+}
+
+/* Click outside modal to close */
+.modal { cursor: pointer; }
+.modal-box { cursor: default; }
+
 .tab-btn {
   background: transparent; color: #94a3b8; border: none; border-bottom: 2px solid transparent;
   padding: 8px 12px; cursor: pointer; font-size: 14px; font-weight: 600; margin-right: 8px;
