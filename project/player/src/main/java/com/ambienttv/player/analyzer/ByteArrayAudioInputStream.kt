@@ -1,20 +1,22 @@
 package com.ambienttv.player.analyzer
 
-import be.tarsos.dsp.io.AudioInputStream
 import be.tarsos.dsp.io.TarsosDSPAudioFormat
+import be.tarsos.dsp.io.TarsosDSPAudioInputStream
 import java.io.IOException
 
 /**
- * Wraps a raw PCM byte array as a TarsosDSP [AudioInputStream].
+ * Wraps a raw PCM byte array as a TarsosDSP [TarsosDSPAudioInputStream].
  */
 class ByteArrayAudioInputStream(
     private val data: ByteArray,
     private val audioFormat: TarsosDSPAudioFormat
-) : AudioInputStream {
+) : TarsosDSPAudioInputStream {
 
     private var position = 0
 
     override fun getFormat(): TarsosDSPAudioFormat = audioFormat
+
+    override fun getFrameLength(): Long = -1L
 
     @Throws(IOException::class)
     override fun read(b: ByteArray, off: Int, len: Int): Int {

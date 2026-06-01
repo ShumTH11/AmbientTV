@@ -1,0 +1,16 @@
+apiVersion: v2
+name: ambienttv
+description: Helm chart for AmbientTV backend deployment
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - ambienttv
+  - media
+  - streaming
+home: https://github.com/yourusername/ambienttv
+sources:
+  - https://github.com/yourusername/ambienttv
+maintainers:
+  - name: AmbientTV Team
+    email: dev@ambienttv.example.com

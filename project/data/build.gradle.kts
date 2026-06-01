@@ -56,4 +56,7 @@ dependencies {
     implementation(libs.work.runtime)
     implementation(libs.hilt.work)
     ksp(libs.hilt.work.compiler)
+
+    // Logging
+    implementation(libs.timber)
 }

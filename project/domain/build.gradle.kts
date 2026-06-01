@@ -19,4 +19,9 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
     implementation("javax.inject:javax.inject:1")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.17")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
 }

@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import com.ambienttv.domain.analytics.AnalyticsTracker
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -37,15 +37,21 @@ import kotlin.math.abs
  * - Stall detection (slow buffering > 3 s)
  * - Auto stop after prolonged pause (> 5 min) to free buffers
  * - Fatal error propagation for upstream fallback handling
+ * - Crossfade transitions between content pairs (via [CrossfadePlayer])
+ * - Anonymous analytics tracking (playback start/end, category selection)
  *
  * @param videoPlayer The ExoPlayerWrapper instance used for video playback.
  * @param audioPlayer The ExoPlayerWrapper instance used for audio playback.
+ * @param crossfadePlayer Optional dual-ExoPlayer for seamless crossfade transitions.
+ * @param analyticsTracker Anonymous analytics for playback events.
  */
 @Singleton
 @UnstableApi
 class SyncedPlaybackManager @Inject constructor(
     val videoPlayer: ExoPlayerWrapper,
-    val audioPlayer: ExoPlayerWrapper
+    val audioPlayer: ExoPlayerWrapper,
+    private val crossfadePlayer: CrossfadePlayer,
+    private val analyticsTracker: AnalyticsTracker
 ) {
     companion object {
         private const val SYNC_INTERVAL_MS = 200L
@@ -76,6 +82,11 @@ class SyncedPlaybackManager @Inject constructor(
     val syncState: Flow<SyncState> = _syncState.asStateFlow()
     val currentSyncState: SyncState get() = _syncState.value
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var syncJob: Job? = null
+    private var pauseTimeoutJob: Job? = null
+    private var isReleased: Boolean = false
+
     /**
      * Emits true when either player has been buffering for more than 3 seconds.
      * UI can use this to show a placeholder / quiet animation.
@@ -92,11 +103,6 @@ class SyncedPlaybackManager @Inject constructor(
         }
         stateFlow
     }
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-    private var syncJob: Job? = null
-    private var pauseTimeoutJob: Job? = null
-    private var isReleased: Boolean = false
 
     val isLoaded: Boolean get() = currentPair != null
 
@@ -156,8 +162,30 @@ class SyncedPlaybackManager @Inject constructor(
     }
 
     /**
+     * Prepares the next content pair for crossfade transition.
+     * Call before [crossfadeToNext] to ensure the next pair is ready.
+     */
+    fun prepareNextPair(pair: ContentPair) {
+        crossfadePlayer.prepareNext(
+            videoUri = pair.video.uri,
+            audioUri = pair.audio.uri
+        )
+    }
+
+    /**
+     * Performs a crossfade to the previously prepared next pair.
+     * After crossfade completes, the new pair becomes the active pair.
+     */
+    fun crossfadeToNext(nextPair: ContentPair) {
+        crossfadePlayer.crossfadeTo()
+        currentPair = nextPair
+        analyticsTracker.trackPlaybackStart(nextPair.video.category.id, nextPair.id)
+    }
+
+    /**
      * Starts playback of both video and audio players.
      * Both players will begin playing simultaneously.
+     * Triggers analytics tracking for playback start.
      */
     fun play() {
         if (isReleased || currentPair == null) return
@@ -166,6 +194,10 @@ class SyncedPlaybackManager @Inject constructor(
         videoPlayer.play()
         audioPlayer.play()
 
+        currentPair?.let { pair ->
+            analyticsTracker.trackPlaybackStart(pair.video.category.id, pair.id)
+        }
+
         _syncState.value = _syncState.value.copy(isPlaying = true)
     }
 
@@ -173,12 +205,18 @@ class SyncedPlaybackManager @Inject constructor(
      * Pauses both video and audio players.
      * If paused for more than 5 minutes, players will be stopped automatically
      * to release buffered memory.
+     * Triggers analytics tracking for playback end.
      */
     fun pause() {
         if (isReleased) return
 
         videoPlayer.pause()
         audioPlayer.pause()
+
+        currentPair?.let { pair ->
+            val durationMs = videoPlayer.currentPosition.coerceAtLeast(0L)
+            analyticsTracker.trackPlaybackEnd(pair.video.category.id, pair.id, durationMs)
+        }
 
         _syncState.value = _syncState.value.copy(isPlaying = false)
         startPauseTimeout()
@@ -257,6 +295,7 @@ class SyncedPlaybackManager @Inject constructor(
         coroutineScope.cancel()
         videoPlayer.release()
         audioPlayer.release()
+        crossfadePlayer.release()
         currentPair = null
     }
 

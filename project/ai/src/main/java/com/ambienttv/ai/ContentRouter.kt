@@ -14,6 +14,7 @@ import com.ambienttv.domain.model.MediaType
 import com.ambienttv.domain.model.MediaMetadata
 import com.ambienttv.domain.preset.DefaultCategories
 import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,7 +44,8 @@ public class ContentRouter @Inject constructor(
         val localItems = try {
             val cached = localDataSource.getCachedContent()
             cached.filter { it.category.id == category.id }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Local content resolution failed for ${category.id}")
             emptyList()
         }
 
@@ -54,7 +56,8 @@ public class ContentRouter @Inject constructor(
         // 2. Try remote sources
         val remoteItems = try {
             searchRemoteSources(category)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Remote content resolution failed for ${category.id}")
             emptyList()
         }
 
@@ -69,7 +72,8 @@ public class ContentRouter @Inject constructor(
                     "Ambient ${category.name} video background"
                 )
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "AI generation failed for ${category.id}")
             null
         }
 
@@ -97,7 +101,8 @@ public class ContentRouter @Inject constructor(
             try {
                 val cached = localDataSource.getCachedContent()
                 cached.filter { it.category.id == category.id }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Local resolution with fallback failed for ${category.id}")
                 null
             }
         }
@@ -118,7 +123,8 @@ public class ContentRouter @Inject constructor(
         val remoteItems = withTimeoutOrNull(SOURCE_TIMEOUT_MS) {
             try {
                 searchRemoteSources(category)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Remote resolution with fallback failed for ${category.id}")
                 emptyList()
             }
         } ?: emptyList()
@@ -142,7 +148,8 @@ public class ContentRouter @Inject constructor(
                 generationDataSource.generateVideo(
                     "Ambient ${category.name} seamless looping video"
                 )
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Video generation with fallback failed for ${category.id}")
                 null
             }
         }
@@ -152,7 +159,8 @@ public class ContentRouter @Inject constructor(
                 generationDataSource.generateMusic(
                     "Ambient background music for ${category.name}, seamless loop"
                 )
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Music generation with fallback failed for ${category.id}")
                 null
             }
         }
@@ -186,15 +194,21 @@ public class ContentRouter @Inject constructor(
         for (query in queries) {
             try {
                 results += remoteDataSource.searchPixabayVideos(query)
-            } catch (_: Exception) { /* ignore */ }
+            } catch (e: Exception) {
+                Timber.e(e, "Pixabay search failed: $query")
+            }
 
             try {
                 results += remoteDataSource.searchPexelsVideos(query)
-            } catch (_: Exception) { /* ignore */ }
+            } catch (e: Exception) {
+                Timber.e(e, "Pexels search failed: $query")
+            }
 
             try {
                 results += remoteDataSource.searchInternetArchive(query)
-            } catch (_: Exception) { /* ignore */ }
+            } catch (e: Exception) {
+                Timber.e(e, "Internet Archive search failed: $query")
+            }
 
             if (results.isNotEmpty()) break
         }
@@ -232,7 +246,7 @@ public class ContentRouter @Inject constructor(
             licenseType = LicenseType.FREE,
             metadata = MediaMetadata(
                 durationMs = 30_000L,
-                bpm = 60,
+                bpm = 60f,
                 mood = fallbackCategory.defaultTags.find { it.key == "mood" }?.value
             )
         )

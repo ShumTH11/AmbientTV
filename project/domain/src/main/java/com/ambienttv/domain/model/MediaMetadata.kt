@@ -14,5 +14,6 @@ public data class MediaMetadata(
     val era: String? = null,
     val colorPalette: List<String> = emptyList(),
     val resolution: String? = null,
-    val fileSize: Long = 0
+    val fileSize: Long = 0,
+    val thumbnailUrl: String? = null
 )

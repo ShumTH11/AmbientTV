@@ -5,6 +5,7 @@ import com.ambienttv.data.remote.api.AmbientBackendApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,7 +46,8 @@ class CatalogUpdater @Inject constructor(
         return try {
             val text = catalogFile.readText()
             json.decodeFromString(CatalogDto.serializer(), text)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to read cached catalog")
             null
         }
     }
@@ -66,7 +68,8 @@ class CatalogUpdater @Inject constructor(
             catalogFile.writeText(text)
             prefs.edit().putLong("last_sync", now).apply()
             true
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Catalog sync failed")
             false
         }
     }
@@ -81,7 +84,8 @@ class CatalogUpdater @Inject constructor(
             catalogFile.writeText(text)
             prefs.edit().putLong("last_sync", System.currentTimeMillis()).apply()
             true
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Catalog force sync failed")
             false
         }
     }

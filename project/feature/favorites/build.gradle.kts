@@ -55,4 +55,7 @@ dependencies {
 
     // Coroutines
     implementation(libs.coroutines.android)
+
+    // Logging
+    implementation(libs.timber)
 }

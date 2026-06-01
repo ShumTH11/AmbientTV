@@ -1,7 +1,7 @@
 /**
  * AmbientTV Service Worker — PWA Offline Support
  */
-const CACHE_NAME = 'ambienttv-v2';
+const CACHE_NAME = 'ambienttv-v15';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,7 +10,10 @@ const STATIC_ASSETS = [
   '/js/config.js',
   '/js/api.js',
   '/js/app.js',
-  '/js/player.js'
+  '/js/player.js',
+  '/js/player-core.js',
+  '/js/player-fallback.js',
+  '/js/player-ui.js'
 ];
 
 self.addEventListener('install', (e) => {

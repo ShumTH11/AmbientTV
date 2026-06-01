@@ -6,6 +6,7 @@ import com.ambienttv.domain.model.AIProviderConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,7 +48,8 @@ public class AIProviderConfigManager @Inject constructor(
             } else {
                 defaultConfig()
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to load AI provider config, using defaults")
             defaultConfig()
         }
     }
@@ -88,7 +90,8 @@ public class AIProviderConfigManager @Inject constructor(
                 val content = stream.bufferedReader().use { it.readText() }
                 json.decodeFromString(ProviderConfigRoot.serializer(), content)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to load AI config from assets")
             null
         }
     }

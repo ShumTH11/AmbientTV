@@ -14,6 +14,8 @@
 
 **Дата завершения**: 2026-05-23
 
+---
+
 ## Stage 1: Корневая структура проекта ✅
 - [x] Корневые gradle-файлы (build.gradle.kts, settings.gradle.kts)
 - [x] gradle/libs.versions.toml (Version Catalog)
@@ -77,3 +79,63 @@
 - [x] DataModule — @Binds ContentRepositoryImpl + DataSources
 - [x] AndroidManifest — permissions, leanback, PlaybackService
 - **Результат**: 11 файлов, 826 строк. Коммит: `528e3d3`
+
+## Stage 8: Улучшения (Enhancements) ✅
+
+### P0 — Критичные
+- [x] **Unit tests :domain** — 73 теста
+- [x] **Health check backend** — `/api/health` с проверкой SQLite + Redis
+- [x] **Исправление битых ссылок** — 45 локальных URL заменены на внешние (Pexels + Archive.org)
+- [x] **Валидация каталога** — `validate-catalog.js` проверяет все URL, помечает битые
+- [x] **Локальное хранение медиа** — 8 файлов (77 MB), static route `/media`, UI индикатор
+
+### P1 — Важные
+- [x] **Redis-кэш поиска** — SHA256-ключи, TTL 1 час
+- [x] **Focus management Android TV** — FocusRequester, автофокус
+- [x] **Error handling + Timber** — 37 пустых catch заменены на `Timber.e()`
+- [x] **Keyboard shortcuts** — 13 сочетаний (Space, arrows, F, M, N, P, R, S, H, 0-9)
+- [x] **Плейлисты пользователя** — SQLite таблицы, API CRUD, UI создание/просмотр/воспроизведение
+- [x] **Auto-DJ / Radio mode** — случайное переключение каждые 3-5 минут, клавиша D
+- [x] **Picture-in-Picture** — нативный PiP API, кнопка 🖼️, клавиша I
+- [x] **Cross-device resume** — синхронизация прогресса каждые 10 сек, восстановление позиции
+
+### P2 — Средние
+- [x] **Crossfade между парами** — `CrossfadePlayer` с двумя ExoPlayer, плавный переход 2 сек
+- [x] **Offline-first архитектура** — Room как single source of truth
+- [x] **Smart suggestions** — рекомендации по времени суток (6 слотов), сезону, выходным
+- [x] **Content health monitoring** — `/api/admin/health` проверяет все URL каталога
+- [x] **Темы dark/light** — переключатель, 40+ CSS-правил, сохранение в localStorage
+
+### P3 — Низкий приоритет
+- [x] **AI генерация обложек** — `generateCoverImage()` с кэшированием
+- [x] **Анонимная аналитика** — `AnalyticsTracker` интерфейс + `InMemoryAnalyticsTracker`
+- [x] **User stats в профиле** — 4 метрики: избранное, просмотры, плейлисты, минуты
+
+**Дата завершения улучшений**: 2026-06-01
+
+---
+
+## Stage 9: Docker + Production Deploy
+
+### Создано
+- [x] **Multi-stage Dockerfile** — Node.js 20 Alpine, non-root user, production-ready
+- [x] **docker-compose.yml** — dev/prod конфигурации, volume для SQLite
+- [x] **nginx.conf** — reverse proxy, gzip, cache headers
+- [x] **.dockerignore** — исключает node_modules, .git, media
+
+### Инструкция по запуску
+```bash
+# Development
+docker-compose -f docker-compose.yml up backend-dev
+
+# Production
+docker-compose -f docker-compose.yml up -d backend-prod
+```
+
+---
+
+## Следующие шаги
+- [ ] Backend upload аналитики (self-hosted Plausible/Matomo)
+- [ ] Реализация generateImage() в настоящем GenerationDataSourceImpl
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] SSL certificates (Let's Encrypt)

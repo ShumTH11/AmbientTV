@@ -16,6 +16,9 @@ interface ContentDao {
     @Query("SELECT * FROM content_items WHERE categoryId = :categoryId")
     suspend fun getByCategory(categoryId: String): List<ContentEntity>
 
+    @Query("SELECT * FROM content_items WHERE categoryId = :categoryId")
+    fun observeByCategory(categoryId: String): Flow<List<ContentEntity>>
+
     @Query("SELECT * FROM content_items WHERE type = :type")
     suspend fun getByType(type: String): List<ContentEntity>
 

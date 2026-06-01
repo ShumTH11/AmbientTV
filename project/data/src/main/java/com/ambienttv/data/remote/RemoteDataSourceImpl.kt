@@ -5,7 +5,9 @@ import com.ambienttv.data.mapper.DtoMapper
 import com.ambienttv.data.remote.api.AmbientBackendApi
 import com.ambienttv.domain.model.ContentItem
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -27,7 +29,8 @@ class RemoteDataSourceImpl @Inject constructor(
             response.items.mapNotNull { item ->
                 dtoMapper.mapYouTubeItemToContentItem(item)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "YouTube search failed: $query")
             emptyList()
         }
     }
@@ -38,7 +41,8 @@ class RemoteDataSourceImpl @Inject constructor(
             response.hits.map { hit ->
                 dtoMapper.mapPixabayHitToContentItem(hit)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Pixabay search failed: $query")
             emptyList()
         }
     }
@@ -49,7 +53,8 @@ class RemoteDataSourceImpl @Inject constructor(
             response.videos.map { video ->
                 dtoMapper.mapPexelsVideoToContentItem(video)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Pexels search failed: $query")
             emptyList()
         }
     }
@@ -60,7 +65,8 @@ class RemoteDataSourceImpl @Inject constructor(
             response.response?.docs?.mapNotNull { doc ->
                 dtoMapper.mapInternetArchiveDocToContentItem(doc)
             } ?: emptyList()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Internet Archive search failed: $query")
             emptyList()
         }
     }

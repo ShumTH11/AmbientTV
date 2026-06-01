@@ -2,9 +2,11 @@ package com.ambienttv.app.di
 
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
+import com.ambienttv.player.CrossfadePlayer
 import com.ambienttv.player.ExoPlayerWrapper
 import com.ambienttv.player.SyncedPlaybackManager
 import com.ambienttv.player.cache.PlaybackCacheManager
+import com.ambienttv.domain.analytics.AnalyticsTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,6 +75,18 @@ object PlayerModule {
     }
 
     /**
+     * Provides the CrossfadePlayer for seamless transitions between content pairs.
+     */
+    @Provides
+    @Singleton
+    @UnstableApi
+    fun provideCrossfadePlayer(
+        @ApplicationContext context: Context
+    ): CrossfadePlayer {
+        return CrossfadePlayer(context)
+    }
+
+    /**
      * Provides the SyncedPlaybackManager that coordinates video and audio playback.
      */
     @Provides
@@ -80,8 +94,10 @@ object PlayerModule {
     @UnstableApi
     fun provideSyncedPlaybackManager(
         @Named("video") videoPlayer: ExoPlayerWrapper,
-        @Named("audio") audioPlayer: ExoPlayerWrapper
+        @Named("audio") audioPlayer: ExoPlayerWrapper,
+        crossfadePlayer: CrossfadePlayer,
+        analyticsTracker: AnalyticsTracker
     ): SyncedPlaybackManager {
-        return SyncedPlaybackManager(videoPlayer, audioPlayer)
+        return SyncedPlaybackManager(videoPlayer, audioPlayer, crossfadePlayer, analyticsTracker)
     }
 }

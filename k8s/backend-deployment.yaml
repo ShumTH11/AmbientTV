@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ambienttv-backend
+  namespace: ambienttv
+  labels:
+    app: ambienttv-backend
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ambienttv-backend
+  template:
+    metadata:
+      labels:
+        app: ambienttv-backend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+        fsGroup: 2000
+      containers:
+        - name: backend
+          image: ambienttv/backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: ambienttv-config
+            - secretRef:
+                name: ambienttv-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: backups
+              mountPath: /app/backups
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: backups
+          emptyDir:
+            sizeLimit: 500Mi
+        - name: tmp
+          emptyDir:
+            sizeLimit: 100Mi

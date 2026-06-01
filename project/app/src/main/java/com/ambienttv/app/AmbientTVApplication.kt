@@ -43,7 +43,7 @@ import javax.inject.Inject
  */
 @UnstableApi
 @HiltAndroidApp
-class AmbientTVApplication : Application(), Configuration.Provider {
+class AmbientTVApplication : Application() {
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -65,9 +65,6 @@ class AmbientTVApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var syncedPlaybackManager: SyncedPlaybackManager
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -146,12 +143,6 @@ class AmbientTVApplication : Application(), Configuration.Provider {
                 Log.w("AmbientTVApplication", "Failed to seed catalog or preload cache: ${e.message}")
             }
         }
-    }
-
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
     }
 
     private fun scheduleCatalogSync() {

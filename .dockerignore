@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+README_WINDOWS.md
+.env
+.env.local
+.env.production
+*.md
+!DEPLOY.md
+!PROGRESS.md
+k8s/
+project/
+backups/
+*.db
+*.db-journal

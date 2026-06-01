@@ -66,6 +66,24 @@ public interface ContentRepository {
     public fun getAllCategories(): Flow<List<ContentCategory>>
 
     /**
+     * Observes content items for a category from local DB (offline-first).
+     * Network refresh happens separately via [refreshCategoryContent].
+     *
+     * @param category The content category to observe
+     * @return Flow emitting lists of content items from local cache
+     */
+    public fun observeContentByCategory(category: ContentCategory): Flow<List<ContentItem>>
+
+    /**
+     * Explicitly triggers a network refresh for a category.
+     * Results are written to local DB and will appear in [observeContentByCategory].
+     *
+     * @param category The category to refresh
+     * @return Number of new items fetched, or 0 if failed/no network
+     */
+    public suspend fun refreshCategoryContent(category: ContentCategory): Int
+
+    /**
      * Adds a new content category.
      *
      * @param category The category to add

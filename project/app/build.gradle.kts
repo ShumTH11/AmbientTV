@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+import java.util.Properties
+
 android {
     namespace = "com.ambienttv.app"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -18,9 +20,10 @@ android {
         versionName = "1.0.0"
 
         // Read APP_SECRET from local.properties for backend authentication
-        val localProps = java.util.Properties().apply {
-            val localFile = rootProject.file("local.properties")
-            if (localFile.exists()) load(localFile.inputStream())
+        val localProps = Properties()
+        val localFile = rootProject.file("local.properties")
+        if (localFile.exists()) {
+            localFile.inputStream().use { localProps.load(it) }
         }
         val appSecret = localProps.getProperty("APP_SECRET", "")
         buildConfigField("String", "APP_SECRET", "\"$appSecret\"")
@@ -129,4 +132,7 @@ dependencies {
     implementation(libs.work.runtime)
     implementation(libs.hilt.work)
     ksp(libs.hilt.work.compiler)
+
+    // Logging
+    implementation(libs.timber)
 }

@@ -55,4 +55,13 @@ public interface AIContentAdapter {
      * @return Flow emitting ambient profile updates as analysis progresses
      */
     public suspend fun analyzeEnvironment(): Flow<AmbientProfile>
+
+    /**
+     * Generates a cover image/thumbnail for a category using AI.
+     * Returns a URL or local path to the generated image.
+     *
+     * @param category The category to generate a cover for
+     * @return URL string of the generated cover, or null if generation failed
+     */
+    public suspend fun generateCoverImage(category: ContentCategory): String?
 }

@@ -14,6 +14,7 @@ import com.ambienttv.domain.model.MediaType
 import com.ambienttv.domain.preset.DefaultCategories
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -120,7 +121,8 @@ class DomainMapper @Inject constructor() {
         } else {
             try {
                 json.decodeFromString(ListSerializer(ContentTag.serializer()), tagsJson)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to parse tags JSON")
                 emptyList()
             }
         }
@@ -136,7 +138,8 @@ class DomainMapper @Inject constructor() {
         } else {
             try {
                 json.decodeFromString(MediaMetadata.serializer(), metadataJson)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to parse metadata JSON")
                 MediaMetadata()
             }
         }

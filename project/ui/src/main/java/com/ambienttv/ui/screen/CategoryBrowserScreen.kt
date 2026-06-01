@@ -15,11 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -68,6 +73,11 @@ fun CategoryBrowserScreen(
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val smartSuggestion by viewModel.smartSuggestion.collectAsStateWithLifecycle()
+
+    // Focus management for TV navigation
+    val gridState = rememberLazyGridState()
+    val firstItemFocusRequester = remember { FocusRequester() }
+    val suggestionFocusRequester = remember { FocusRequester() }
 
     Box(
         modifier = Modifier
@@ -142,19 +152,31 @@ fun CategoryBrowserScreen(
             if (!isLoading) {
                 smartSuggestion?.let { category ->
                     val suggestionLabel = when (category.id) {
-                        "christmas" -> "\u2744 Festive season pick"
-                        "nature" -> "\u2600 Morning calm"
-                        "cyberpunk" -> "\u263D Evening vibes"
-                        "fantasy" -> "\u2694 Afternoon epic"
-                        "steampunk" -> "\u2699 Industrial afternoon"
-                        else -> "\u2728 Recommended for you"
+                        "christmas" -> "❄ Festive season pick"
+                        "nature" -> "☀ Morning calm"
+                        "cyberpunk" -> "☽ Evening vibes"
+                        "fantasy" -> "⚔ Afternoon epic"
+                        "steampunk" -> "⚙ Industrial afternoon"
+                        else -> "✨ Recommended for you"
                     }
                     SmartSuggestionCard(
                         category = category,
                         label = suggestionLabel,
-                        onClick = { onCategorySelected(category) }
+                        onClick = { onCategorySelected(category) },
+                        modifier = Modifier.focusRequester(suggestionFocusRequester)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
+            // Auto-focus first element when categories load
+            LaunchedEffect(categories, isLoading) {
+                if (!isLoading && categories.isNotEmpty()) {
+                    if (smartSuggestion != null) {
+                        suggestionFocusRequester.requestFocus()
+                    } else {
+                        firstItemFocusRequester.requestFocus()
+                    }
                 }
             }
 
@@ -204,6 +226,7 @@ fun CategoryBrowserScreen(
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
+                    state = gridState,
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -215,7 +238,12 @@ fun CategoryBrowserScreen(
                     ) { category ->
                         CategoryCard(
                             category = category,
-                            onClick = { onCategorySelected(category) }
+                            onClick = { onCategorySelected(category) },
+                            modifier = if (category == categories.first()) {
+                                Modifier.focusRequester(firstItemFocusRequester)
+                            } else {
+                                Modifier
+                            }
                         )
                     }
                 }
@@ -247,22 +275,19 @@ private fun LoadingDots() {
 private fun SmartSuggestionCard(
     category: ContentCategory,
     label: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    androidx.tv.material3.Surface(
-        modifier = Modifier.fillMaxWidth(),
+    androidx.compose.material3.Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = androidx.tv.material3.SurfaceDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+        border = androidx.compose.material3.CardDefaults.outlinedCardBorder().copy(
+            width = 2.dp,
+            brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
         ),
-        border = androidx.tv.material3.Border(
-            border = BorderStroke(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ),
-        onClick = { onClick() }
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier

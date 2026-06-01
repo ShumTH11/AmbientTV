@@ -28,4 +28,8 @@ public interface GenerationDataSource {
      * Polls the status of a generation request as a flow.
      */
     public fun pollStatus(generationId: String): Flow<GenerationStatus>
+    /**
+     * Generates an image from a text prompt using an AI image generation provider.
+     */
+    public suspend fun generateImage(prompt: String): MediaResult
 }

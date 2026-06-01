@@ -58,4 +58,7 @@ dependencies {
     // TarsosDSP audio analysis (BPM / key detection)
     implementation("be.tarsos.dsp:core:2.5")
     implementation("be.tarsos.dsp:jvm:2.5")
+
+    // Logging
+    implementation(libs.timber)
 }

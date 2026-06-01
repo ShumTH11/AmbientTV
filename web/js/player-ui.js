@@ -40,6 +40,10 @@ function setupAutoHideUI() {
   });
 }
 function resetUIHideTimer() {
+  // If UI is force-hidden by user, do not restore full controls on mouse move
+  if (playerOverlay.classList.contains('ui-force-hidden')) {
+    return;
+  }
   controls.classList.add('visible');
   playerOverlay.classList.add('active-ui');
   document.getElementById('uiHint').classList.add('hidden');
@@ -48,6 +52,19 @@ function resetUIHideTimer() {
     controls.classList.remove('visible');
     playerOverlay.classList.remove('active-ui');
   }, 5000);
+}
+
+function toggleUI() {
+  const isHidden = playerOverlay.classList.toggle('ui-force-hidden');
+  if (isHidden) {
+    controls.classList.remove('visible');
+    playerOverlay.classList.remove('active-ui');
+    document.getElementById('uiHint').classList.add('hidden');
+    if (uiHideTimer) clearTimeout(uiHideTimer);
+  } else {
+    playerOverlay.classList.remove('ui-force-hidden');
+    resetUIHideTimer();
+  }
 }
 
 // ========== WAKE LOCK ==========
@@ -252,4 +269,42 @@ function showToast(msg) {
   t.textContent = msg;
   t.className = 'show';
   setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ========== SHORTCUT HELP ==========
+let shortcutHelpVisible = false;
+function toggleShortcutHelp() {
+  shortcutHelpVisible = !shortcutHelpVisible;
+  let overlay = document.getElementById('shortcutHelpOverlay');
+  if (!shortcutHelpVisible) {
+    if (overlay) overlay.remove();
+    return;
+  }
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'shortcutHelpOverlay';
+    overlay.innerHTML = `
+      <div style="position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:300; display:flex; align-items:center; justify-content:center;">
+        <div style="background:#16161e; border:1px solid #2a2a3a; border-radius:14px; padding:28px; max-width:420px; width:90%;">
+          <h3 style="color:#7dd3fc; margin-bottom:16px; font-size:18px;">⌨️ Горячие клавиши</h3>
+          <div style="display:grid; grid-template-columns:auto 1fr; gap:8px 16px; font-size:14px; color:#e2e2e2;">
+            <span style="color:#94a3b8; font-family:monospace;">Space</span><span>Play / Pause</span>
+            <span style="color:#94a3b8; font-family:monospace;">← →</span><span>Назад / Вперёд на 10с</span>
+            <span style="color:#94a3b8; font-family:monospace;">↑ ↓</span><span>Громкость +/-</span>
+            <span style="color:#94a3b8; font-family:monospace;">F</span><span>Полноэкранный режим</span>
+            <span style="color:#94a3b8; font-family:monospace;">M</span><span>Вкл/выкл звук</span>
+            <span style="color:#94a3b8; font-family:monospace;">N</span><span>Следующий трек</span>
+            <span style="color:#94a3b8; font-family:monospace;">P</span><span>Предыдущий трек</span>
+            <span style="color:#94a3b8; font-family:monospace;">R</span><span>Повтор вкл/выкл</span>
+            <span style="color:#94a3b8; font-family:monospace;">D</span><span>Auto-DJ вкл/выкл</span>
+            <span style="color:#94a3b8; font-family:monospace;">S</span><span>Сохранить как основную</span>
+            <span style="color:#94a3b8; font-family:monospace;">I</span><span>Picture-in-Picture</span>
+            <span style="color:#94a3b8; font-family:monospace;">H</span><span>Скрыть/показать UI</span>
+            <span style="color:#94a3b8; font-family:monospace;">0-9</span><span>Перейти к % трека</span>
+          </div>
+          <button onclick="toggleShortcutHelp()" style="margin-top:20px; width:100%; padding:10px; background:#0ea5e9; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">Закрыть</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+  }
 }

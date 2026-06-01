@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmbientTV — Admin</title>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div id="login-screen" class="screen">
+  <div class="login-card">
+    <h1>🔐 AmbientTV Admin</h1>
+    <p>Введите пароль администратора</p>
+    <input type="password" id="login-password" placeholder="Пароль" autofocus>
+    <button id="login-btn">Войти</button>
+    <div id="login-error" class="error"></div>
+  </div>
+</div>
+
+<div id="admin-screen" class="screen hidden">
+  <header class="admin-header">
+    <h1>🎬 AmbientTV Admin</h1>
+    <div class="header-actions">
+      <span id="stats-bar"></span>
+      <button id="save-btn" class="btn-primary">💾 Сохранить</button>
+      <button id="logout-btn" class="btn-secondary">Выйти</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="sidebar">
+      <button id="add-category-btn" class="btn-accent">➕ Новая категория</button>
+      <div id="category-list" class="category-list"></div>
+    </div>
+
+    <div class="content" id="content-area">
+      <div class="empty-state">Выберите категорию слева или создайте новую</div>
+    </div>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

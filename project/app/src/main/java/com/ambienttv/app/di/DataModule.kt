@@ -14,6 +14,8 @@ import com.ambienttv.domain.repository.ContentRepository
 import com.ambienttv.domain.repository.FavoritesRepository
 import com.ambienttv.domain.repository.HistoryRepository
 import com.ambienttv.domain.repository.SettingsRepository
+import com.ambienttv.domain.analytics.AnalyticsTracker
+import com.ambienttv.data.analytics.InMemoryAnalyticsTracker
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -93,4 +95,13 @@ abstract class DataModule {
     abstract fun bindHistoryRepository(
         impl: HistoryRepositoryImpl
     ): HistoryRepository
+
+    /**
+     * Binds [InMemoryAnalyticsTracker] to the [AnalyticsTracker] domain interface.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindAnalyticsTracker(
+        impl: InMemoryAnalyticsTracker
+    ): AnalyticsTracker
 }

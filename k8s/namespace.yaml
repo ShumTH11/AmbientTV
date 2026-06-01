@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ambienttv
+  labels:
+    name: ambienttv
+    app.kubernetes.io/name: ambienttv
+    app.kubernetes.io/part-of: ambienttv

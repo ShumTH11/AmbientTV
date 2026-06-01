@@ -3,6 +3,7 @@ package com.ambienttv.data.local.converter
 import androidx.room.TypeConverter
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import com.ambienttv.domain.model.ContentTag
 import com.ambienttv.domain.model.MediaMetadata
 
@@ -27,7 +28,8 @@ class Converters {
         } else {
             try {
                 json.decodeFromString(ListSerializer(ContentTag.serializer()), tagsJson)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to deserialize ContentTag list")
                 emptyList()
             }
         }
@@ -46,7 +48,8 @@ class Converters {
         } else {
             try {
                 json.decodeFromString(MediaMetadata.serializer(), metadataJson)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to deserialize MediaMetadata")
                 MediaMetadata()
             }
         }
@@ -65,7 +68,8 @@ class Converters {
         } else {
             try {
                 json.decodeFromString(jsonString)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to deserialize String list")
                 emptyList()
             }
         }

@@ -40,6 +40,29 @@ db.serialize(() => {
     watched_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   )`);
+
+  // Playlists table
+  db.run(`CREATE TABLE IF NOT EXISTS playlists (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`);
+
+  // Playlist items table
+  db.run(`CREATE TABLE IF NOT EXISTS playlist_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    playlist_id INTEGER NOT NULL,
+    video_url TEXT NOT NULL,
+    audio_url TEXT NOT NULL,
+    title TEXT,
+    category_id TEXT,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE,
+    UNIQUE(playlist_id, video_url, audio_url)
+  )`);
 });
 
 module.exports = db;

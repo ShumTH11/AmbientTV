@@ -148,7 +148,7 @@ class PlayerViewModel @Inject constructor(
             viewModelScope.launch {
                 _errorMessage.value = "Playback error: ${error.message}. Switching to next pair..."
                 // Auto-switch to next pair in the same category if available
-                val category = _currentPair.value?.category
+                val category = _currentPair.value?.video?.category
                 if (category != null) {
                     try {
                         val next = matchContentUseCase(category)

@@ -1,0 +1,112 @@
+# Default values for ambienttv.
+# This is a YAML-formatted file.
+
+replicaCount: 2
+
+image:
+  repository: ambienttv/backend
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+  hosts:
+    - host: ambienttv.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ambienttv-tls
+      hosts:
+        - ambienttv.example.com
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Redis configuration
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: "7-alpine"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+# Application configuration
+config:
+  port: 3000
+  allowedOrigins: "https://ambienttv.example.com,http://localhost:3000"
+  sqliteDir: "/app/data"
+  nodeEnv: "production"
+  logLevel: "info"
+
+# Secrets (override these!)
+secrets:
+  appSecret: "CHANGE_ME"
+  adminPasswordHash: "$2a$10$CHANGE_ME"
+  pexelsApiKey: ""
+  pixabayApiKey: ""
+  youtubeApiKey: ""
+  coverrApiKey: ""
+
+# Network policy
+networkPolicy:
+  enabled: true

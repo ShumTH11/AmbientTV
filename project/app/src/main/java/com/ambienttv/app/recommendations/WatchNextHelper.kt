@@ -37,20 +37,26 @@ class WatchNextHelper @Inject constructor(
             }
             ?: return@withContext
 
-        val posterUri = pair.video.thumbnailUrl.takeIf { it.isNotBlank() }
-            ?.let { Uri.parse(it) }
+        val thumbnailUrl: String? = pair.video.metadata?.thumbnailUrl
+        val posterUri: Uri? = if (thumbnailUrl != null && thumbnailUrl.isNotBlank()) {
+            Uri.parse(thumbnailUrl)
+        } else {
+            null
+        }
 
-        val values = WatchNextProgram.Builder()
-            .setType(WatchNextProgram.TYPE_CONTINUE)
+        val builder = WatchNextProgram.Builder()
             .setTitle(pair.video.title)
             .setDescription("Ambient: ${pair.video.category.name}")
-            .apply { posterUri?.let { setPosterArtUri(it) } }
             .setIntent(intent)
             .setInternalProviderId(pair.id)
             .setLastPlaybackPositionMillis(0)
-            .setDurationMillis((pair.video.duration * 1000L).toInt())
-            .build()
-            .toContentValues()
+            .setDurationMillis((pair.video.metadata?.durationMs ?: 0L).toInt())
+
+        if (posterUri != null) {
+            builder.setPosterArtUri(posterUri)
+        }
+
+        val values = builder.build().toContentValues()
 
         context.contentResolver.insert(contentUri, values)
     }

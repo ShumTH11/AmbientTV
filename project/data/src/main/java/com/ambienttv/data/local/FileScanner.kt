@@ -18,6 +18,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
+import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
@@ -177,7 +178,8 @@ class FileScanner @Inject constructor(
                 era = jsonObj["era"]?.jsonPrimitive?.content,
                 tags = tags
             )
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to parse sidecar JSON: ${jsonFile.path}")
             null
         }
     }
@@ -197,7 +199,8 @@ class FileScanner @Inject constructor(
                 "aac", "wav" -> parseGenericAudioTags(audioFile)
                 else -> null
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to parse ID3 tags: ${audioFile.path}")
             null
         }
     }
@@ -212,7 +215,8 @@ class FileScanner @Inject constructor(
                 durationMs = duration,
                 fileSize = file.length()
             )
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to parse MP3 tags: ${file.path}")
             MediaMetadata(fileSize = file.length())
         }
     }
@@ -250,7 +254,8 @@ class FileScanner @Inject constructor(
                 else -> 128000
             }
             (fileSize * 8 * 1000) / bitrate
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to estimate audio duration: ${file.path}")
             0L
         }
     }

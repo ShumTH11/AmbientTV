@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -146,7 +147,7 @@ public class AIContentAdapterImpl @Inject constructor(
         val result = createPlaceholderAudio(targetCategory).copy(
             metadata = MediaMetadata(
                 durationMs = 60_000L,
-                bpm = input.bpm.toInt(),
+                bpm = input.bpm.toFloat(),
                 mood = input.mood,
                 era = targetCategory.defaultTags.find { it.key == "era" }?.value
             )
@@ -313,10 +314,51 @@ public class AIContentAdapterImpl @Inject constructor(
             licenseType = LicenseType.FREE,
             metadata = MediaMetadata(
                 durationMs = 30_000L,
-                bpm = 60,
+                bpm = 60f,
                 mood = category.defaultTags.find { it.key == "mood" }?.value
             )
         )
+    }
+
+    /**
+     * Generates a cover image for a category using AI image generation.
+     * Falls back to a predefined placeholder if generation is unavailable.
+     */
+    override suspend fun generateCoverImage(category: ContentCategory): String? {
+        val cacheKey = "cover_${category.id}"
+        contentCache.get(cacheKey)?.let { cached ->
+            return cached.uri
+        }
+
+        val prompt = buildCoverPrompt(category)
+
+        return try {
+            val result = withTimeoutOrNull(GENERATION_TIMEOUT_MS) {
+                generationDataSource.generateImage(prompt)
+            }
+
+            when (result) {
+                is MediaResult.Success -> {
+                    contentCache.put(cacheKey, result.contentItem)
+                    result.contentItem.uri
+                }
+                else -> getFallbackCoverUrl(category)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Cover generation failed for ${category.id}")
+            getFallbackCoverUrl(category)
+        }
+    }
+
+    private fun buildCoverPrompt(category: ContentCategory): String {
+        val mood = category.defaultTags.find { it.key == "mood" }?.value ?: "ambient"
+        val era = category.defaultTags.find { it.key == "era" }?.value ?: "modern"
+        return "Beautiful ${category.name} ambient scene, ${mood} atmosphere, ${era} style, " +
+                "cinematic lighting, high quality, 16:9 aspect ratio, no text"
+    }
+
+    private fun getFallbackCoverUrl(category: ContentCategory): String {
+        return "android.resource://com.ambienttv.app/drawable/${category.id}_cover"
     }
 
     private fun inferCategoryFromColors(colors: List<String>): ContentCategory {

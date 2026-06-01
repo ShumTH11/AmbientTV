@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ambienttv
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret.yaml
+  - redis-deployment.yaml
+  - redis-service.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - ingress.yaml
+  - hpa.yaml
+  - network-policy.yaml
+
+images:
+  - name: ambienttv/backend
+    newTag: latest
+
+commonLabels:
+  app.kubernetes.io/part-of: ambienttv
+  app.kubernetes.io/managed-by: kubectl

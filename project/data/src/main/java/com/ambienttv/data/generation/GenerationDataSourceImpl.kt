@@ -80,6 +80,30 @@ class GenerationDataSourceImpl @Inject constructor(
     }
 
     /**
+     * Generates an image from a text prompt.
+     * Placeholder implementation — returns error with fallback.
+     */
+    override suspend fun generateImage(prompt: String): MediaResult {
+        return withContext(Dispatchers.IO) {
+            delay(100)
+            val category = inferCategoryFromPrompt(prompt)
+            val fallbackItem = createFallbackItem(
+                type = MediaType.VIDEO,
+                category = category,
+                prompt = prompt
+            ).copy(
+                id = "ai_image_${UUID.randomUUID()}",
+                type = MediaType.VIDEO,
+                uri = "placeholder://image/$prompt"
+            )
+            MediaResult.Error(
+                message = "AI image generation not yet configured. Provide a provider API key to enable.",
+                fallback = fallbackItem
+            )
+        }
+    }
+
+    /**
      * Infers a content category from the text prompt using keyword matching.
      */
     private fun inferCategoryFromPrompt(prompt: String): ContentCategory {

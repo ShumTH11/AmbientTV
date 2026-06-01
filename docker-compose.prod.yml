@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  backend-prod:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/public/media:/app/public/media
+      - ./backend/.env:/app/.env:ro
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    networks:
+      - ambienttv-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+    networks:
+      - ambienttv-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./web:/usr/share/nginx/html:ro
+    depends_on:
+      - backend-prod
+    networks:
+      - ambienttv-net
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+
+networks:
+  ambienttv-net:
+    driver: bridge

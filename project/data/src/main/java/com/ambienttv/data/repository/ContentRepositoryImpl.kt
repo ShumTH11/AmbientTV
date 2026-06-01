@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -58,7 +59,8 @@ class ContentRepositoryImpl @Inject constructor(
         val localResults = try {
             contentDao.getByCategory(category.id)
                 .map { entity -> domainMapper.toContentItem(entity) }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get local content for category: ${category.id}")
             emptyList()
         }
 
@@ -76,7 +78,8 @@ class ContentRepositoryImpl @Inject constructor(
                             }
                         }
                 }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Remote search failed for category: ${category.id}")
             emptyList()
         }
 
@@ -89,7 +92,8 @@ class ContentRepositoryImpl @Inject constructor(
         val allCached = try {
             contentDao.getAll()
                 .map { entity -> domainMapper.toContentItem(entity) }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get all cached content")
             emptyList()
         }
 
@@ -119,7 +123,8 @@ class ContentRepositoryImpl @Inject constructor(
                 }
                 .filter { licenseChecker.canPlay(it) }
                 .distinctBy { it.uri }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Tag search failed")
             emptyList()
         }
     }
@@ -156,7 +161,8 @@ class ContentRepositoryImpl @Inject constructor(
         val videos = searchByCategory(category).filter { it.type == MediaType.VIDEO }
         val audios = try {
             contentDao.getByType("AUDIO").map { domainMapper.toContentItem(it) }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get audio content")
             emptyList()
         }
 
@@ -199,6 +205,40 @@ class ContentRepositoryImpl @Inject constructor(
     override suspend fun addCategory(category: ContentCategory) {
         val entity = domainMapper.toCategoryEntity(category)
         categoryDao.insert(entity)
+    }
+
+    // ----- Offline-First API -----
+
+    override fun observeContentByCategory(category: ContentCategory): Flow<List<ContentItem>> {
+        return contentDao.observeByCategory(category.id)
+            .map { entities ->
+                entities.map { domainMapper.toContentItem(it) }
+                    .filter { licenseChecker.canPlay(it) }
+            }
+    }
+
+    override suspend fun refreshCategoryContent(category: ContentCategory): Int {
+        return try {
+            val remoteItems = remoteDataSource.searchAll(category.name)
+                .filter { item ->
+                    item.category.id == category.id ||
+                        item.tags.any { tag ->
+                            category.defaultTags.any { defaultTag ->
+                                tag.key == defaultTag.key && tag.value.equals(defaultTag.value, ignoreCase = true)
+                            }
+                        }
+                }
+                .distinctBy { it.uri }
+
+            val entities = remoteItems.map { domainMapper.toContentEntity(it) }
+            contentDao.insertAll(entities)
+
+            Timber.d("Refreshed ${remoteItems.size} items for category ${category.id}")
+            remoteItems.size
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to refresh category ${category.id}")
+            0
+        }
     }
 
     // ----- Private Helpers -----

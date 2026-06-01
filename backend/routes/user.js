@@ -103,4 +103,69 @@ router.delete('/history', (req, res) => {
   });
 });
 
+// ========== RESUME / PROGRESS SYNC ==========
+
+// Get last progress for a specific pair
+router.get('/progress', (req, res) => {
+  const { video_url, audio_url } = req.query;
+  if (!video_url || !audio_url) {
+    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+  }
+  db.get(
+    'SELECT progress, duration FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ? ORDER BY watched_at DESC LIMIT 1',
+    [req.userId, video_url, audio_url],
+    (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(row || { progress: 0, duration: 0 });
+    }
+  );
+});
+
+// Save progress (called periodically while playing)
+router.post('/progress', express.json(), (req, res) => {
+  const { video_url, audio_url, title, category_id, progress, duration } = req.body;
+  if (!video_url || !audio_url) {
+    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+  }
+  // Upsert: insert new or update existing latest entry
+  db.get(
+    'SELECT id FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ? ORDER BY watched_at DESC LIMIT 1',
+    [req.userId, video_url, audio_url],
+    (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (row) {
+        db.run(
+          'UPDATE history SET progress = ?, duration = ?, watched_at = CURRENT_TIMESTAMP WHERE id = ?',
+          [progress || 0, duration || 0, row.id],
+          function(err2) {
+            if (err2) return res.status(500).json({ error: err2.message });
+            res.json({ updated: true });
+          }
+        );
+      } else {
+        db.run(
+          'INSERT INTO history (user_id, video_url, audio_url, title, category_id, progress, duration) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [req.userId, video_url, audio_url, title || '', category_id || '', progress || 0, duration || 0],
+          function(err2) {
+            if (err2) return res.status(500).json({ error: err2.message });
+            res.json({ id: this.lastID });
+          }
+        );
+      }
+    }
+  );
+});
+
+// Get all recent progress (for cross-device sync)
+router.get('/progress/all', (req, res) => {
+  db.all(
+    'SELECT video_url, audio_url, title, category_id, progress, duration, watched_at FROM history WHERE user_id = ? ORDER BY watched_at DESC LIMIT 20',
+    [req.userId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows || []);
+    }
+  );
+});
+
 module.exports = router;

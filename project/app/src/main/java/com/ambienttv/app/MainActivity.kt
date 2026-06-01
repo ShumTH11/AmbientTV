@@ -87,9 +87,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: android.content.Intent?) {
+    override fun onNewIntent(intent: android.content.Intent) {
         super.onNewIntent(intent)
-        val pairId = intent?.data?.lastPathSegment ?: return
+        val pairId = intent.data?.lastPathSegment ?: return
         // TvNavigation handles deep links via composition; for simplicity we rely on restart
         // or a shared event bus. For now, restart activity with the new intent.
         this.intent = intent

@@ -101,3 +101,47 @@ async function apiSearchPixabayAudio(query, per_page = 10, type = 'music') {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
+
+// Media status (local vs remote)
+async function apiMediaStatus() {
+  return apiGet('/api/media/status');
+}
+
+// Progress sync
+async function apiGetProgress(videoUrl, audioUrl) {
+  return apiGet(`/api/user/progress?video_url=${encodeURIComponent(videoUrl)}&audio_url=${encodeURIComponent(audioUrl)}`);
+}
+async function apiSaveProgress(item) {
+  return apiPost('/api/user/progress', item);
+}
+async function apiGetAllProgress() {
+  return apiGet('/api/user/progress/all');
+}
+
+// Playlists
+async function apiGetPlaylists() {
+  return apiGet('/api/user/playlists');
+}
+async function apiCreatePlaylist(name) {
+  return apiPost('/api/user/playlists', { name });
+}
+async function apiDeletePlaylist(id) {
+  return apiDelete(`/api/user/playlists/${id}`);
+}
+async function apiGetPlaylist(id) {
+  return apiGet(`/api/user/playlists/${id}`);
+}
+async function apiAddToPlaylist(playlistId, item) {
+  return apiPost(`/api/user/playlists/${playlistId}/items`, item);
+}
+async function apiRemoveFromPlaylist(playlistId, itemId) {
+  return apiDelete(`/api/user/playlists/${playlistId}/items/${itemId}`);
+}
+async function apiReorderPlaylist(playlistId, itemIds) {
+  return fetch(`${CONFIG.API_BASE}/api/user/playlists/${playlistId}/items/reorder`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ item_ids: itemIds })
+  }).then(r => r.json());
+}

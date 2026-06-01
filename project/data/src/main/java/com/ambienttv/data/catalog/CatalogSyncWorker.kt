@@ -17,8 +17,8 @@ class CatalogSyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            val hasUpdate = catalogUpdater.checkForUpdates()
-            if (hasUpdate) {
+            val synced = catalogUpdater.syncIfNeeded()
+            if (synced) {
                 catalogDataSource.invalidateCache()
             }
             Result.success()

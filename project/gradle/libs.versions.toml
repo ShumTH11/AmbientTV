@@ -8,7 +8,7 @@ targetSdk = "35"
 compose-bom = "2026.01.01"
 compose-tv = "1.1.0"
 ksp = "2.0.21-1.0.28"
-media3 = "1.6.2"
+media3 = "1.5.1"
 hilt = "2.55"
 room = "2.7.2"
 retrofit = "2.11.0"
@@ -94,6 +94,9 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+# Logging
+timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

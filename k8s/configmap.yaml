@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ambienttv-config
+  namespace: ambienttv
+data:
+  PORT: "3000"
+  # Comma-separated list of allowed origins (update with your domain)
+  ALLOWED_ORIGINS: "https://ambienttv.example.com,http://localhost:3000"
+  # SQLite data directory inside container
+  SQLITE_DIR: "/app/data"
+  # Redis URL (points to in-cluster Redis service)
+  REDIS_URL: "redis://ambienttv-redis:6379"
+  # Node environment
+  NODE_ENV: "production"
+  # Log level
+  LOG_LEVEL: "info"

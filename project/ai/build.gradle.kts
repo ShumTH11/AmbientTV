@@ -43,4 +43,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
+
+    // Logging
+    implementation(libs.timber)
 }

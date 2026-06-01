@@ -52,8 +52,12 @@ class PlaybackCacheManager @Inject constructor(
             cacheDir,
             LeastRecentlyUsedCacheEvictor(maxBytes),
             databaseProvider
-        )
+        ).also {
+            _isCacheInitialized = true
+        }
     }
+
+    private var _isCacheInitialized = false
 
     /**
      * Builds a [DataSource.Factory] that reads from / writes to this cache.
@@ -73,8 +77,9 @@ class PlaybackCacheManager @Inject constructor(
      * to avoid leaking the database provider.
      */
     fun release() {
-        if (::cache.isInitialized) {
+        if (_isCacheInitialized) {
             cache.release()
+            _isCacheInitialized = false
         }
     }
 
