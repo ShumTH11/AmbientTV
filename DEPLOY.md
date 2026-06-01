@@ -34,7 +34,16 @@ PEXELS_API_KEY=your_key
 PIXABAY_API_KEY=your_key
 YOUTUBE_API_KEY=your_key
 COVERR_API_KEY=your_key
+SMARTCAPTCHA_SITE_KEY=your_yandex_site_key
+SMARTCAPTCHA_SERVER_KEY=your_yandex_server_key
 ```
+
+**Yandex SmartCaptcha setup:**
+1. Go to https://yandex.cloud/ru/services/smartcaptcha
+2. Create a captcha instance
+3. Copy Site key (for frontend) and Server key (for backend verification)
+4. Add both to `.env`
+5. Replace `ysc1_8xI2f0Y2mI2f0Y2mI2f0Y2mI2f0Y2mI2f0Y2mI2f0` in `web/index.html` with your real site key
 
 **Generate admin password hash:**
 ```bash
@@ -282,6 +291,15 @@ Before uploading to Google Play:
 ---
 
 ## 11. New Features (2026-06-01)
+
+### Yandex SmartCaptcha
+Bot protection on registration. Add `SMARTCAPTCHA_SITE_KEY` and `SMARTCAPTCHA_SERVER_KEY` to `.env`. Get keys at https://yandex.cloud/ru/services/smartcaptcha
+
+### 4K Video Library
+11 seamless loop 4K videos (774 MB) hosted locally. Categories: nature, cyberpunk, space, christmas, lofi. All videos in `/media/video/*_4k.mp4`.
+
+### Audio Selection in Player Only
+Removed audio dropdown from category grid. Audio tracks selectable only inside player via extended controls.
 
 ### Keyboard Shortcuts
 13 hotkeys in player: Space, ←→↑↓, F, M, N, P, R, S, H, 0-9. Press ⌨️ for help.

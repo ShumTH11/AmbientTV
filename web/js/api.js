@@ -65,8 +65,8 @@ async function apiCatalog() {
 }
 
 // Auth
-async function apiRegister(email, password, name) {
-  return apiPost('/api/auth/register', { email, password, name });
+async function apiRegister(email, password, name, captchaToken) {
+  return apiPost('/api/auth/register', { email, password, name, captchaToken });
 }
 async function apiLogin(email, password) {
   return apiPost('/api/auth/login', { email, password });

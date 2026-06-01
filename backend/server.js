@@ -116,11 +116,11 @@ app.use('/', express.static(webPath));
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // Local media files (self-hosted video/audio)
-app.use('/media', express.static(path.join(__dirname, 'public', 'media')));
+app.use('/media', express.static(path.join(__dirname, 'media')));
 
 // API: check if media is available locally
 app.get('/api/media/status', (req, res) => {
-  const mediaDir = path.join(__dirname, 'public', 'media');
+  const mediaDir = path.join(__dirname, 'media');
   const videoDir = path.join(mediaDir, 'video');
   const audioDir = path.join(mediaDir, 'audio');
 

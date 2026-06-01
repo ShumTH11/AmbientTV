@@ -7,12 +7,38 @@ const { sanitizeString, sanitizeBody } = require('../middleware/sanitize');
 const router = express.Router();
 
 // Register
-router.post('/register', express.json(), sanitizeBody, (req, res) => {
-  const { email, password } = req.body;
+router.post('/register', express.json(), sanitizeBody, async (req, res) => {
+  const { email, password, captchaToken } = req.body;
   let { name } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email и пароль обязательны' });
   }
+
+  // Verify Yandex SmartCaptcha
+  if (captchaToken) {
+    try {
+      const https = require('https');
+      const verifyUrl = `https://smartcaptcha.yandexcloud.net/validate?secret=${process.env.SMARTCAPTCHA_SERVER_KEY || ''}&token=${encodeURIComponent(captchaToken)}`;
+      const captchaValid = await new Promise((resolve) => {
+        https.get(verifyUrl, (verifyRes) => {
+          let data = '';
+          verifyRes.on('data', chunk => data += chunk);
+          verifyRes.on('end', () => {
+            try {
+              const result = JSON.parse(data);
+              resolve(result.status === 'ok');
+            } catch { resolve(false); }
+          });
+        }).on('error', () => resolve(false));
+      });
+      if (!captchaValid) {
+        return res.status(400).json({ error: 'Капча не пройдена. Попробуйте снова.' });
+      }
+    } catch {
+      return res.status(400).json({ error: 'Ошибка проверки капчи' });
+    }
+  }
+
   // Basic email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {

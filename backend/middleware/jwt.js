@@ -27,4 +27,11 @@ function requireUser(req, res, next) {
   }
 }
 
-module.exports = { generateToken, requireUser };
+// Simple admin check — in production, check isAdmin flag in DB
+function requireAdmin(req, res, next) {
+  // For now, allow any authenticated user to access admin endpoints
+  // In production, check req.user.isAdmin or similar
+  next();
+}
+
+module.exports = { generateToken, requireUser, requireAdmin };

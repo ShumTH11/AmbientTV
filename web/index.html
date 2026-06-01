@@ -32,6 +32,9 @@
       <input type="email" id="regEmail" placeholder="you@example.com">
       <label>Пароль</label>
       <input type="password" id="regPassword" placeholder="Минимум 6 символов">
+      <!-- Yandex SmartCaptcha -->
+      <div id="captcha-container" style="margin:12px 0;"></div>
+      <input type="hidden" id="captchaToken" value="">
       <button onclick="doRegister()">Создать аккаунт</button>
     </div>
     <p id="authError" class="error-text"></p>
@@ -178,6 +181,20 @@
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
 <script src="js/app.js?v=7"></script>
+<!-- Yandex SmartCaptcha -->
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=initCaptcha" defer></script>
+<script>
+  window.SMARTCAPTCHA_SITE_KEY = 'ysc1_8xI2f0Y2mI2f0Y2mI2f0Y2mI2f0Y2mI2f0Y2mI2f0'; // Замените на реальный ключ
+  function initCaptcha() {
+    if (!window.smartCaptcha) return;
+    window.smartCaptcha.render('captcha-container', {
+      sitekey: window.SMARTCAPTCHA_SITE_KEY,
+      callback: function(token) {
+        document.getElementById('captchaToken').value = token;
+      }
+    });
+  }
+</script>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});

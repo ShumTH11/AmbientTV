@@ -126,15 +126,27 @@ async function doRegister() {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
+  const captchaToken = document.getElementById('captchaToken').value;
   document.getElementById('authError').textContent = '';
+
+  if (!captchaToken) {
+    document.getElementById('authError').textContent = 'Пожалуйста, пройдите капчу';
+    return;
+  }
+
   try {
-    const res = await apiRegister(email, password, name);
+    const res = await apiRegister(email, password, name, captchaToken);
     currentUser = res.user;
     document.getElementById('authModal').classList.add('hidden');
     updateUserBadge();
     showToast('Аккаунт создан! Добро пожаловать, ' + res.user.name + '!');
   } catch (e) {
     document.getElementById('authError').textContent = e.message;
+    // Reset captcha on error
+    document.getElementById('captchaToken').value = '';
+    if (window.smartCaptcha) {
+      window.smartCaptcha.reset();
+    }
   }
 }
 
@@ -379,27 +391,11 @@ function renderCategoryPairs(cat) {
     videoMap.get(p.videoUrl).indices.push(i);
   });
 
-  // Собираем уникальные аудио треки категории
-  const uniqueAudios = [];
-  const seenAudio = new Set();
-  cat.pairs.forEach((p, i) => {
-    if (!seenAudio.has(p.audioUrl)) {
-      seenAudio.add(p.audioUrl);
-      const audioTitle = p.title.includes('—') ? p.title.split('—')[1].trim() : p.title;
-      uniqueAudios.push({ url: p.audioUrl, title: audioTitle, idx: i });
-    }
-  });
-
   grid.innerHTML = Array.from(videoMap.entries()).map(([videoUrl, info]) => {
     const firstPair = cat.pairs[info.defaultIdx];
     const videoTitle = firstPair.title.includes('—')
       ? firstPair.title.split('—')[0].trim()
       : firstPair.title;
-
-    const audioOptions = uniqueAudios.map(a => {
-      const selected = a.url === firstPair.audioUrl ? 'selected' : '';
-      return `<option value="${esc(a.url)}" ${selected}>${esc(a.title)}</option>`;
-    }).join('');
 
     return `
       <div class="pair-card" data-video-url="${esc(videoUrl)}">
@@ -409,10 +405,7 @@ function renderCategoryPairs(cat) {
         </div>
         <div class="card-body">
           <h4>${esc(videoTitle || 'Без названия')}</h4>
-          <p>Видео + Аудио</p>
-          <select onchange="updateCategoryPairIndex(this, '${esc(cat.id)}')">
-            ${audioOptions}
-          </select>
+          <p>${info.indices.length} аудио трек(ов)</p>
           <button class="play-btn" data-pair-index="${info.defaultIdx}" onclick="openPair('${esc(cat.id)}', this.dataset.pairIndex)" style="margin-top:10px; width:100%; padding:10px; background:#0ea5e9; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">▶ Смотреть</button>
         </div>
       </div>
@@ -433,24 +426,6 @@ function renderCategoryPairs(cat) {
       });
     }, { rootMargin: '100px' });
     document.querySelectorAll('#categoryPairsGrid video[data-thumb]').forEach(v => observer.observe(v));
-  }
-}
-
-function updateCategoryPairIndex(select, catId) {
-  const card = select.closest('.pair-card');
-  const videoUrl = card.dataset.videoUrl;
-  const audioUrl = select.value;
-  const cat = categories.find(c => c.id === catId);
-  if (!cat) return;
-  // Ищем пару с точным совпадением видео + аудио
-  const pairIndex = cat.pairs.findIndex(p => p.videoUrl === videoUrl && p.audioUrl === audioUrl);
-  const btn = card.querySelector('.play-btn');
-  if (pairIndex >= 0) {
-    btn.dataset.pairIndex = pairIndex;
-  } else {
-    // Fallback: первая пара с этим видео
-    const fallbackIdx = cat.pairs.findIndex(p => p.videoUrl === videoUrl);
-    btn.dataset.pairIndex = fallbackIdx >= 0 ? fallbackIdx : 0;
   }
 }
 
