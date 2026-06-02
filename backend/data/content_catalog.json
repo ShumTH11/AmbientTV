@@ -1,25 +1,16 @@
 {
-  "version": 4,
+  "version": 5,
   "categories": [
     {
       "id": "nature",
+      "name": "Nature",
+      "icon": "🌿",
+      "description": "Forests, mountains, lakes, waterfalls — pure nature in 4K",
       "pairs": [
         {
           "videoUrl": "/media/video/nature17_4k.mp4",
           "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/01.%20Rebirth%20Yoga%20Music%20Academy%20-%20Deep%20Meditation%20(Morning%20Birds%2C%20Waterfall).mp3",
-          "title": "Forest Stream 4K — Deep Meditation (Morning Birds, Waterfall)",
-          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature17_4k.mp4",
-          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/02.%20Calming%20Music%20Sanctuary%20-%20Yoga%20Infinity%20Journey.mp3",
-          "title": "Forest Stream 4K — Yoga Infinity Journey",
-          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature18_4k.mp4",
-          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/03.%20Om%20Meditation%20Music%20Academy%20-%20Bali%20Spa%20(Music%20for%20Massage).mp3",
-          "title": "Mountain Lake 4K — Bali Spa (Music for Massage)",
+          "title": "Forest Stream 4K — Deep Meditation",
           "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
@@ -35,80 +26,126 @@
           "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature19_4k.mp4",
-          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/03.%20%20Relaxation%20Meditation%20Songs%20Divine%20%20-%20%20Relief%20From%20Stress.mp3",
-          "title": "Sunset Meadow 4K — Relief From Stress",
-          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
           "videoUrl": "/media/video/nature20_4k.mp4",
           "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_10_-_Tone_Poetry_E52E62AA-6353-44AE-BA40-2AE6AD7F1776.mp3",
           "title": "Ocean Waves 4K — Tone Poetry",
           "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature20_4k.mp4",
+          "videoUrl": "/media/video/nature21_4k.mp4",
           "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_11_-_The_Healing_Lake_8BE609A8-7115-4273-8A1A-CE5738459E7A.mp3",
-          "title": "Ocean Waves 4K — The Healing Lake",
-          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature21_4k.mp4",
-          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_12_-_It_Was_Beautiful_A8151772-9133-4709-8419-D74050521F15.mp3",
-          "title": "Waterfall Canyon 4K — It Was Beautiful",
-          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature21_4k.mp4",
-          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_13_-_Introverted_Chords_AAA9721C-0CAE-470A-A2CE-A8E1B627463C.mp3",
-          "title": "Waterfall Canyon 4K — Introverted Chords",
+          "title": "Waterfall Canyon 4K — The Healing Lake",
           "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "ambient"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         }
       ]
     },
     {
-      "id": "cyberpunk",
+      "id": "rain",
+      "name": "Rain & Cozy",
+      "icon": "🌧️",
+      "description": "Rainy days, thunderstorms, cozy window views",
       "pairs": [
         {
-          "videoUrl": "/media/video/nature22_4k.mp4",
+          "videoUrl": "/media/video/rain1.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Conditioner_A.mp3",
+          "title": "Rainy Tokyo Night — Deep Sleep",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "rain"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        },
+        {
+          "videoUrl": "/media/video/rain2.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Conditioner_B.mp3",
+          "title": "Thunderstorm — Deep Sleep B",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "rain"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        },
+        {
+          "videoUrl": "/media/video/rain3.mp4",
+          "audioUrl": "https://archive.org/download/SleepSounds/Air_Fan_Deep.mp3",
+          "title": "Cozy Rain Window — Air Fan Deep",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "rain"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        },
+        {
+          "videoUrl": "/media/video/rain4.mp4",
+          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/01.%20Rebirth%20Yoga%20Music%20Academy%20-%20Deep%20Meditation%20(Morning%20Birds%2C%20Waterfall).mp3",
+          "title": "Night Rain Street — Deep Meditation",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "rain"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        }
+      ]
+    },
+    {
+      "id": "lofi",
+      "name": "Lofi & Study",
+      "icon": "📚",
+      "description": "Lofi hip hop, study beats, cozy rooms for focus",
+      "pairs": [
+        {
+          "videoUrl": "/media/video/lofi1.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10000_Moods%2C%20Yasper%20-%20Pick%20Up.mp3",
-          "title": "Neon City 4K — Pick Up",
-          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Lofi Girl Room — Pick Up",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature22_4k.mp4",
+          "videoUrl": "/media/video/lofi2.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10001_Moods%2C%20Yasper%20-%20Sofa%20Stories.mp3",
-          "title": "Neon City 4K — Sofa Stories",
-          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Jazz Cafe — Sofa Stories",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature23_4k.mp4",
+          "videoUrl": "/media/video/lofi3.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10002_Moods%2C%20Yasper%20-%20Vibe%20Vibe.mp3",
-          "title": "Cyber Rain 4K — Vibe Vibe",
-          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Study Room Night — Vibe Vibe",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature23_4k.mp4",
+          "videoUrl": "/media/video/lofi4.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10003_Moods%2C%20Yasper%20-%20Breakfast%20w%20Bastien.mp3",
-          "title": "Cyber Rain 4K — Breakfast w Bastien",
-          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Morning Coffee — Breakfast w Bastien",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature24_4k.mp4",
+          "videoUrl": "/media/video/lofi5.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10004_Moods%2C%20Yasper%20-%20Lazy%20Sunday.mp3",
-          "title": "Digital Grid 4K — Lazy Sunday",
+          "title": "Late Night Study — Lazy Sunday",
+          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk",
+      "name": "Cyberpunk & Neon",
+      "icon": "🌃",
+      "description": "Neon cities, cyberpunk streets, synthwave vibes",
+      "pairs": [
+        {
+          "videoUrl": "/media/video/cyber1.mp4",
+          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10005_Moods%2C%20Yasper%20-%20Night%20Owls.mp3",
+          "title": "Neon Tokyo Drive — Night Owls",
           "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature24_4k.mp4",
-          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10005_Moods%2C%20Yasper%20-%20Night%20Owls.mp3",
-          "title": "Digital Grid 4K — Night Owls",
+          "videoUrl": "/media/video/cyber2.mp4",
+          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/02.%20Calming%20Music%20Sanctuary%20-%20Yoga%20Infinity%20Journey.mp3",
+          "title": "Cyberpunk City Rain — Yoga Infinity",
+          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        },
+        {
+          "videoUrl": "/media/video/cyber3.mp4",
+          "audioUrl": "https://archive.org/download/best-relaxation-music-2019/Best%20Relaxation%20Music%20(2019)/03.%20%20Relaxation%20Meditation%20Songs%20Divine%20%20-%20%20Relief%20From%20Stress.mp3",
+          "title": "Neon Alley — Relief From Stress",
+          "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+        },
+        {
+          "videoUrl": "/media/video/cyber4.mp4",
+          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_12_-_It_Was_Beautiful_A8151772-9133-4709-8419-D74050521F15.mp3",
+          "title": "Futuristic Highway — It Was Beautiful",
           "tags": [{"key": "mood", "value": "dark"}, {"key": "genre", "value": "synthwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         }
       ]
     },
     {
       "id": "space",
+      "name": "Space & Cosmos",
+      "icon": "🌌",
+      "description": "Galaxies, nebulae, moon surfaces, star fields",
       "pairs": [
         {
           "videoUrl": "/media/video/moon29_4k.mp4",
@@ -117,98 +154,74 @@
           "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/moon29_4k.mp4",
+          "videoUrl": "/media/video/moon30_4k.mp4",
           "audioUrl": "https://archive.org/download/SleepSounds/Air_Conditioner_B.mp3",
-          "title": "Moon Surface 4K — Deep Sleep B",
+          "title": "Nebula Clouds 4K — Deep Sleep B",
           "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/moon30_4k.mp4",
+          "videoUrl": "/media/video/space1.mp4",
           "audioUrl": "https://archive.org/download/SleepSounds/Air_Fan_Deep.mp3",
-          "title": "Nebula Clouds 4K — Air Fan Deep",
+          "title": "Galaxy Rotation — Air Fan Deep",
           "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/moon30_4k.mp4",
+          "videoUrl": "/media/video/space2.mp4",
           "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/01.%20Rebirth%20Yoga%20Music%20Academy%20-%20Deep%20Meditation%20(Morning%20Birds%2C%20Waterfall).mp3",
-          "title": "Nebula Clouds 4K — Deep Meditation",
+          "title": "Star Field Journey — Deep Meditation",
           "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature25_4k.mp4",
-          "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/02.%20Calming%20Music%20Sanctuary%20-%20Yoga%20Infinity%20Journey.mp3",
-          "title": "Star Field 4K — Yoga Infinity Journey",
-          "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature25_4k.mp4",
+          "videoUrl": "/media/video/space3.mp4",
           "audioUrl": "https://archive.org/download/va-deep-meditation-50-tracks-healing-sounds-of-nature-2016/Various%20Artists%20-%20Deep%20Meditation%2050%20Tracks%20Healing%20Sounds%20of%20Nature%20(2016)/03.%20Om%20Meditation%20Music%20Academy%20-%20Bali%20Spa%20(Music%20for%20Massage).mp3",
-          "title": "Star Field 4K — Bali Spa",
+          "title": "Cosmic Dust — Bali Spa",
           "tags": [{"key": "mood", "value": "epic"}, {"key": "genre", "value": "space"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         }
       ]
     },
     {
-      "id": "christmas",
+      "id": "japan",
+      "name": "Japan & Anime",
+      "icon": "🗾",
+      "description": "Tokyo streets, Kyoto temples, anime aesthetics",
       "pairs": [
         {
-          "videoUrl": "/media/video/nature17_4k.mp4",
-          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_10_-_Tone_Poetry_E52E62AA-6353-44AE-BA40-2AE6AD7F1776.mp3",
-          "title": "Winter Forest 4K — Tone Poetry",
-          "tags": [{"key": "mood", "value": "festive"}, {"key": "genre", "value": "christmas"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "videoUrl": "/media/video/japan1.mp4",
+          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10000_Moods%2C%20Yasper%20-%20Pick%20Up.mp3",
+          "title": "Tokyo Night Streets — Pick Up",
+          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "japan"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature18_4k.mp4",
-          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_11_-_The_Healing_Lake_8BE609A8-7115-4273-8A1A-CE5738459E7A.mp3",
-          "title": "Snow Mountain 4K — The Healing Lake",
-          "tags": [{"key": "mood", "value": "festive"}, {"key": "genre", "value": "christmas"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "videoUrl": "/media/video/japan2.mp4",
+          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10001_Moods%2C%20Yasper%20-%20Sofa%20Stories.mp3",
+          "title": "Kyoto Bamboo Forest — Sofa Stories",
+          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "japan"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature19_4k.mp4",
-          "audioUrl": "https://archive.org/download/CalmPills/Uplifting_Pills_-_Calm_Pill_12_-_It_Was_Beautiful_A8151772-9133-4709-8419-D74050521F15.mp3",
-          "title": "Frost Meadow 4K — It Was Beautiful",
-          "tags": [{"key": "mood", "value": "festive"}, {"key": "genre", "value": "christmas"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "videoUrl": "/media/video/japan3.mp4",
+          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10002_Moods%2C%20Yasper%20-%20Vibe%20Vibe.mp3",
+          "title": "Rainy Osaka — Vibe Vibe",
+          "tags": [{"key": "mood", "value": "calm"}, {"key": "genre", "value": "japan"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         }
       ]
     },
     {
-      "id": "lofi",
+      "id": "vaporwave",
+      "name": "Vaporwave & Retro",
+      "icon": "🌴",
+      "description": "Vaporwave aesthetics, retro futurism, 80s nostalgia",
       "pairs": [
         {
-          "videoUrl": "/media/video/nature20_4k.mp4",
-          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10000_Moods%2C%20Yasper%20-%20Pick%20Up.mp3",
-          "title": "Cozy Ocean 4K — Pick Up",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature21_4k.mp4",
-          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10001_Moods%2C%20Yasper%20-%20Sofa%20Stories.mp3",
-          "title": "Cozy Waterfall 4K — Sofa Stories",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature22_4k.mp4",
-          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10002_Moods%2C%20Yasper%20-%20Vibe%20Vibe.mp3",
-          "title": "Cozy Rain 4K — Vibe Vibe",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature23_4k.mp4",
+          "videoUrl": "/media/video/vapor1.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10003_Moods%2C%20Yasper%20-%20Breakfast%20w%20Bastien.mp3",
-          "title": "Cozy Storm 4K — Breakfast w Bastien",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Mallsoft Dreams — Breakfast w Bastien",
+          "tags": [{"key": "mood", "value": "nostalgic"}, {"key": "genre", "value": "vaporwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         },
         {
-          "videoUrl": "/media/video/nature24_4k.mp4",
+          "videoUrl": "/media/video/vapor2.mp4",
           "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10004_Moods%2C%20Yasper%20-%20Lazy%20Sunday.mp3",
-          "title": "Cozy Grid 4K — Lazy Sunday",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
-        },
-        {
-          "videoUrl": "/media/video/nature25_4k.mp4",
-          "audioUrl": "https://archive.org/download/chillhop-music/tracks/mp3/10005_Moods%2C%20Yasper%20-%20Night%20Owls.mp3",
-          "title": "Cozy Stars 4K — Night Owls",
-          "tags": [{"key": "mood", "value": "cozy"}, {"key": "genre", "value": "lofi"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
+          "title": "Retro Grid Sunset — Lazy Sunday",
+          "tags": [{"key": "mood", "value": "nostalgic"}, {"key": "genre", "value": "vaporwave"}, {"key": "duration", "value": "long"}, {"key": "quality", "value": "4k"}]
         }
       ]
     }

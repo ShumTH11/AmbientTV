@@ -2,9 +2,49 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const fs = require('fs').promises;
 const path = require('path');
+const multer = require('multer');
 
 const router = express.Router();
 const CATALOG_PATH = path.join(__dirname, '..', 'data', 'content_catalog.json');
+const MEDIA_DIR = path.join(__dirname, '..', 'media');
+const VIDEO_DIR = path.join(MEDIA_DIR, 'video');
+const AUDIO_DIR = path.join(MEDIA_DIR, 'audio');
+
+// Ensure media dirs exist
+(async () => {
+  try { await fs.mkdir(VIDEO_DIR, { recursive: true }); } catch (e) {}
+  try { await fs.mkdir(AUDIO_DIR, { recursive: true }); } catch (e) {}
+})();
+
+// Multer storage for uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const type = req.params.type || 'video';
+    const dest = type === 'audio' ? AUDIO_DIR : VIDEO_DIR;
+    cb(null, dest);
+  },
+  filename: (req, file, cb) => {
+    const timestamp = Date.now();
+    const ext = path.extname(file.originalname) || '.mp4';
+    cb(null, `upload_${timestamp}${ext}`);
+  }
+});
+
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 * 1024 }, // 2GB max
+  fileFilter: (req, file, cb) => {
+    const allowedVideo = ['video/mp4', 'video/webm', 'video/ogg'];
+    const allowedAudio = ['audio/mpeg', 'audio/mp3', 'audio/ogg', 'audio/wav', 'audio/flac'];
+    const type = req.params.type || 'video';
+    const allowed = type === 'audio' ? allowedAudio : allowedVideo;
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Invalid file type: ${file.mimetype}. Allowed: ${allowed.join(', ')}`));
+    }
+  }
+});
 
 let writePromise = null;
 
@@ -106,6 +146,119 @@ router.get('/stats', requireAdmin, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// ========== LOCAL MEDIA MANAGEMENT ==========
+
+// List local media files
+router.get('/media', requireAdmin, async (req, res) => {
+  try {
+    const videoFiles = await fs.readdir(VIDEO_DIR).catch(() => []);
+    const audioFiles = await fs.readdir(AUDIO_DIR).catch(() => []);
+    
+    const videos = await Promise.all(videoFiles.map(async (f) => {
+      const stat = await fs.stat(path.join(VIDEO_DIR, f));
+      return {
+        name: f,
+        type: 'video',
+        size: stat.size,
+        sizeMB: (stat.size / 1024 / 1024).toFixed(2),
+        modified: stat.mtime,
+        path: `/media/video/${f}`
+      };
+    }));
+    
+    const audios = await Promise.all(audioFiles.map(async (f) => {
+      const stat = await fs.stat(path.join(AUDIO_DIR, f));
+      return {
+        name: f,
+        type: 'audio',
+        size: stat.size,
+        sizeMB: (stat.size / 1024 / 1024).toFixed(2),
+        modified: stat.mtime,
+        path: `/media/audio/${f}`
+      };
+    }));
+    
+    res.json({ videos, audios, totalCount: videos.length + audios.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to list media', detail: err.message });
+  }
+});
+
+// Upload media file
+router.post('/media/upload/:type', requireAdmin, upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const type = req.params.type;
+    const filePath = type === 'audio' 
+      ? `/media/audio/${req.file.filename}`
+      : `/media/video/${req.file.filename}`;
+    
+    res.json({
+      success: true,
+      file: {
+        name: req.file.filename,
+        originalName: req.file.originalname,
+        type: type,
+        size: req.file.size,
+        sizeMB: (req.file.size / 1024 / 1024).toFixed(2),
+        path: filePath
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Upload failed', detail: err.message });
+  }
+});
+
+// Delete media file
+router.delete('/media/:type/:filename', requireAdmin, async (req, res) => {
+  try {
+    const { type, filename } = req.params;
+    const dir = type === 'audio' ? AUDIO_DIR : VIDEO_DIR;
+    const filePath = path.join(dir, filename);
+    
+    // Security: prevent directory traversal
+    if (!filePath.startsWith(dir)) {
+      return res.status(403).json({ error: 'Invalid path' });
+    }
+    
+    await fs.unlink(filePath);
+    res.json({ success: true, deleted: filename });
+  } catch (err) {
+    res.status(500).json({ error: 'Delete failed', detail: err.message });
+  }
+});
+
+// Get media usage stats
+router.get('/media/stats', requireAdmin, async (req, res) => {
+  try {
+    const videoFiles = await fs.readdir(VIDEO_DIR).catch(() => []);
+    const audioFiles = await fs.readdir(AUDIO_DIR).catch(() => []);
+    
+    let videoSize = 0;
+    let audioSize = 0;
+    
+    for (const f of videoFiles) {
+      const stat = await fs.stat(path.join(VIDEO_DIR, f));
+      videoSize += stat.size;
+    }
+    for (const f of audioFiles) {
+      const stat = await fs.stat(path.join(AUDIO_DIR, f));
+      audioSize += stat.size;
+    }
+    
+    res.json({
+      videos: { count: videoFiles.length, sizeMB: (videoSize / 1024 / 1024).toFixed(2) },
+      audios: { count: audioFiles.length, sizeMB: (audioSize / 1024 / 1024).toFixed(2) },
+      total: { count: videoFiles.length + audioFiles.length, sizeMB: ((videoSize + audioSize) / 1024 / 1024).toFixed(2) }
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to get stats', detail: err.message });
   }
 });
 

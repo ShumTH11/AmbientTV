@@ -91,6 +91,10 @@
 - [x] **Yandex SmartCaptcha** — защита регистрации от ботов, верификация на бэкенде
 - [x] **4K видео библиотека** — 11 файлов (774 MB), seamless loop, локальный хостинг
 - [x] **Обновление каталога v4** — все видео на `/media/video/*_4k.mp4`, тег quality: 4k
+- [x] **Расширенная видео библиотека v5** — 32 видео (6.7 GB) по 7 категориям: Nature, Rain, Lofi, Cyberpunk, Space, Japan, Vaporwave
+- [x] **Аудио библиотека** — 19 треков (1.2 GB): lofi hip hop, ambient, sleep sounds
+- [x] **Админка управления медиа** — API endpoints: загрузка, удаление, список, статистика локальных файлов
+- [x] **Удаление дубликатов** — убраны SD-версии, оставлены только 4K (`*_4k.mp4`)
 
 ### P1 — Важные
 - [x] **Redis-кэш поиска** — SHA256-ключи, TTL 1 час
@@ -115,11 +119,44 @@
 - [x] **Анонимная аналитика** — `AnalyticsTracker` интерфейс + `InMemoryAnalyticsTracker`
 - [x] **User stats в профиле** — 4 метрики: избранное, просмотры, плейлисты, минуты
 
-**Дата завершения улучшений**: 2026-06-01
+**Дата завершения улучшений**: 2026-06-02
 
 ---
 
-## Stage 9: Docker + Production Deploy
+## Stage 9: Расширение контент-библиотеки
+
+### Видео: 32 файла (6.7 GB)
+| Категория | Кол-во | Примеры |
+|-----------|--------|---------|
+| Nature (4K) | 5 | Forest Stream, Mountain Lake, Sunset Meadow, Ocean Waves, Waterfall Canyon |
+| Rain & Cozy | 4 | Rainy Tokyo Night, Thunderstorm, Cozy Rain Window, Night Rain Street |
+| Lofi & Study | 5 | Lofi Girl Room, Jazz Cafe, Study Room Night, Morning Coffee, Late Night Study |
+| Cyberpunk & Neon | 4 | Neon Tokyo Drive, Cyberpunk City Rain, Neon Alley, Futuristic Highway |
+| Space & Cosmos | 5 | Moon Surface 4K, Nebula Clouds 4K, Galaxy Rotation, Star Field Journey, Cosmic Dust |
+| Japan & Anime | 3 | Tokyo Night Streets, Kyoto Bamboo Forest, Rainy Osaka |
+| Vaporwave & Retro | 2 | Mallsoft Dreams, Retro Grid Sunset |
+
+### Аудио: 19 треков (1.2 GB)
+| Жанр | Кол-во | Примеры |
+|------|--------|---------|
+| Lofi Hip Hop | 7 | Pick Up, Sofa Stories, Vibe Vibe, Breakfast w Bastien, Rest Until Dark, Witch Hat, Butterfly |
+| Ambient | 6 | Deep Meditation, Physical Therapy, Anti Stress, Tone Poetry, Healing Lake, It Was Beautiful |
+| Sleep Sounds | 3 | Air Conditioner A/B, Air Fan Deep (по 5+ часов каждый) |
+| Chillhop | 3 | Bookshelves, Colors Fade, Feather |
+
+### Админка управления медиа
+| Endpoint | Method | Описание |
+|----------|--------|----------|
+| `/api/admin/media` | GET | Список всех локальных файлов |
+| `/api/admin/media/stats` | GET | Статистика (количество, размер) |
+| `/api/admin/media/upload/:type` | POST | Загрузка файла (video/audio) |
+| `/api/admin/media/:type/:filename` | DELETE | Удаление файла |
+
+**Пароль админа**: `change_me_in_production`
+
+---
+
+## Stage 10: Docker + Production Deploy
 
 ### Создано
 - [x] **Multi-stage Dockerfile** — Node.js 20 Alpine, non-root user, production-ready
