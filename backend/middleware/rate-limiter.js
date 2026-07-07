@@ -1,60 +1,52 @@
-/** /root/.openclaw/workspace/AmbientTV/backend/middleware/rate-limiter.js */
+// In-memory rate limiter (no external dependency, serverless-safe).
+// On Vercel each function instance keeps its own counter — sufficient for basic
+// abuse protection. For a shared global limit, point this at an external store.
 
-const Redis = require('ioredis');
+const store = new Map(); // key -> { count, resetAt }
 
-const redis = new Redis({
-  host: process.env.REDIS_HOST || '127.0.0.1',
-  port: process.env.REDIS_PORT || 6379,
-  retryStrategy: (times) => Math.min(times * 50, 2000),
-  enableOfflineQueue: false
-});
+function cleanup() {
+  const now = Date.now();
+  let removed = 0;
+  for (const [k, v] of store) {
+    if (now > v.resetAt) {
+      store.delete(k);
+      removed++;
+    }
+  }
+  return removed;
+}
 
-redis.on('error', (err) => {
-  console.error('[Redis] error:', err.message);
-});
-
-redis.on('connect', () => {
-  console.log('[Redis] connected');
-});
-
-// Rate limiter using Redis
 function rateLimit(opts = {}) {
   const { windowMs = 60000, maxRequests = 100, keyPrefix = 'rl' } = opts;
-  const windowSeconds = Math.floor(windowMs / 1000);
 
-  return async (req, res, next) => {
-    const ip = req.ip || req.connection.remoteAddress || 'unknown';
+  return (req, res, next) => {
+    const ip = req.ip || (req.connection && req.connection.remoteAddress) || 'unknown';
     const key = `${keyPrefix}:${ip}`;
+    const now = Date.now();
 
-    try {
-      const current = await redis.incr(key);
-      if (current === 1) {
-        await redis.expire(key, windowSeconds);
-      }
-
-      const ttl = await redis.ttl(key);
-      res.setHeader('X-RateLimit-Limit', maxRequests);
-      res.setHeader('X-RateLimit-Remaining', Math.max(0, maxRequests - current));
-      res.setHeader('X-RateLimit-Reset', ttl);
-
-      if (current > maxRequests) {
-        return res.status(429).json({
-          error: 'Too many requests',
-          retryAfter: ttl
-        });
-      }
-      next();
-    } catch (err) {
-      // If Redis fails, allow request (fail open for availability)
-      console.error('[RateLimit] Redis error:', err.message);
-      next();
+    let rec = store.get(key);
+    if (!rec || now > rec.resetAt) {
+      rec = { count: 0, resetAt: now + windowMs };
+      store.set(key, rec);
     }
+    rec.count++;
+
+    const ttl = Math.max(0, Math.ceil((rec.resetAt - now) / 1000));
+    res.setHeader('X-RateLimit-Limit', maxRequests);
+    res.setHeader('X-RateLimit-Remaining', Math.max(0, maxRequests - rec.count));
+    res.setHeader('X-RateLimit-Reset', ttl);
+
+    if (rec.count > maxRequests) {
+      return res.status(429).json({ error: 'Too many requests', retryAfter: ttl });
+    }
+
+    if (store.size > 5000) cleanup();
+    next();
   };
 }
 
-// Different limits for different endpoints
-const strict = () => rateLimit({ windowMs: 15 * 60 * 1000, maxRequests: 5, keyPrefix: 'rl:strict' });   // login/register
-const standard = () => rateLimit({ windowMs: 60 * 1000, maxRequests: 30, keyPrefix: 'rl:std' });          // API
-const generous = () => rateLimit({ windowMs: 60 * 1000, maxRequests: 100, keyPrefix: 'rl:gen' });        // catalog/health
+const strict = () => rateLimit({ windowMs: 15 * 60 * 1000, maxRequests: 5, keyPrefix: 'rl:strict' }); // login/register
+const standard = () => rateLimit({ windowMs: 60 * 1000, maxRequests: 30, keyPrefix: 'rl:std' }); // API
+const generous = () => rateLimit({ windowMs: 60 * 1000, maxRequests: 100, keyPrefix: 'rl:gen' }); // catalog/health
 
-module.exports = { rateLimit, strict, standard, generous, redis };
+module.exports = { rateLimit, strict, standard, generous };

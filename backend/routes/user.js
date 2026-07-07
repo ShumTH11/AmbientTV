@@ -4,168 +4,131 @@ const { requireUser } = require('../middleware/jwt');
 const { sanitizeBody } = require('../middleware/sanitize');
 
 const router = express.Router();
-router.use(requireUser);
 
-// Apply input sanitization to all body routes
-router.use(sanitizeBody);
+function validUrl(u) {
+  return typeof u === 'string' && u.length > 0 && u.length < 2000;
+}
 
-// ========== FAVORITES ==========
-
-// Get all favorites
-router.get('/favorites', (req, res) => {
-  db.all(
-    'SELECT id, video_url, audio_url, title, category_id, created_at FROM favorites WHERE user_id = ? ORDER BY created_at DESC',
-    [req.userId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(rows);
-    }
-  );
-});
-
-// Add favorite
-router.post('/favorites', express.json(), (req, res) => {
-  const { video_url, audio_url, title, category_id } = req.body;
-  if (!video_url || !audio_url) {
-    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+// ---- Favorites ----
+router.post('/favorites', express.json(), requireUser, sanitizeBody, async (req, res) => {
+  const { video_url, audio_url, title, category_id } = req.body || {};
+  const v = video_url || '';
+  const a = audio_url || '';
+  if (!validUrl(v) && !validUrl(a)) {
+    return res.status(400).json({ error: 'video_url or audio_url required' });
   }
-  db.run(
-    'INSERT OR REPLACE INTO favorites (user_id, video_url, audio_url, title, category_id) VALUES (?, ?, ?, ?, ?)',
-    [req.userId, video_url, audio_url, title || '', category_id || ''],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID, added: true });
-    }
-  );
-});
-
-// Remove favorite
-router.delete('/favorites', express.json(), (req, res) => {
-  const { video_url, audio_url } = req.body;
-  db.run(
-    'DELETE FROM favorites WHERE user_id = ? AND video_url = ? AND audio_url = ?',
-    [req.userId, video_url, audio_url],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ deleted: this.changes > 0 });
-    }
-  );
-});
-
-// ========== HISTORY ==========
-
-// Get history
-router.get('/history', (req, res) => {
-  db.all(
-    'SELECT id, video_url, audio_url, title, category_id, progress, duration, watched_at FROM history WHERE user_id = ? ORDER BY watched_at DESC LIMIT 50',
-    [req.userId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(rows);
-    }
-  );
-});
-
-// Add history entry
-router.post('/history', express.json(), (req, res) => {
-  const { video_url, audio_url, title, category_id, progress, duration } = req.body;
-  if (!video_url || !audio_url) {
-    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+  try {
+    await db.run(
+      'INSERT OR IGNORE INTO favorites (user_id, video_url, audio_url, title, category_id) VALUES (?, ?, ?, ?, ?)',
+      [req.userId, v, a, title || '', category_id || '']
+    );
+    const row = await db.get(
+      'SELECT * FROM favorites WHERE user_id = ? AND video_url = ? AND audio_url = ?',
+      [req.userId, v, a]
+    );
+    res.json(row);
+  } catch (err) {
+    console.error('Add favorite error:', err.message);
+    res.status(500).json({ error: 'Failed to add favorite' });
   }
-  db.run(
-    'INSERT INTO history (user_id, video_url, audio_url, title, category_id, progress, duration) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    [req.userId, video_url, audio_url, title || '', category_id || '', progress || 0, duration || 0],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID });
-    }
-  );
 });
 
-// Update progress
-router.patch('/history/progress', express.json(), (req, res) => {
-  const { video_url, audio_url, progress, duration } = req.body;
-  db.run(
-    'UPDATE history SET progress = ?, duration = ? WHERE user_id = ? AND video_url = ? AND audio_url = ? AND watched_at = (SELECT MAX(watched_at) FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ?)',
-    [progress || 0, duration || 0, req.userId, video_url, audio_url, req.userId, video_url, audio_url],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ updated: this.changes > 0 });
-    }
-  );
-});
-
-// Clear history
-router.delete('/history', (req, res) => {
-  db.run('DELETE FROM history WHERE user_id = ?', [req.userId], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ deleted: this.changes });
-  });
-});
-
-// ========== RESUME / PROGRESS SYNC ==========
-
-// Get last progress for a specific pair
-router.get('/progress', (req, res) => {
-  const { video_url, audio_url } = req.query;
-  if (!video_url || !audio_url) {
-    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+router.get('/favorites', requireUser, async (req, res) => {
+  try {
+    const rows = await db.all(
+      'SELECT * FROM favorites WHERE user_id = ? ORDER BY created_at DESC',
+      [req.userId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Get favorites error:', err.message);
+    res.status(500).json({ error: 'Failed to load favorites' });
   }
-  db.get(
-    'SELECT progress, duration FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ? ORDER BY watched_at DESC LIMIT 1',
-    [req.userId, video_url, audio_url],
-    (err, row) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(row || { progress: 0, duration: 0 });
-    }
-  );
 });
 
-// Save progress (called periodically while playing)
-router.post('/progress', express.json(), (req, res) => {
-  const { video_url, audio_url, title, category_id, progress, duration } = req.body;
-  if (!video_url || !audio_url) {
-    return res.status(400).json({ error: 'video_url и audio_url обязательны' });
+router.delete('/favorites', express.json(), requireUser, sanitizeBody, async (req, res) => {
+  const { video_url, audio_url } = req.body || {};
+  const v = video_url || '';
+  const a = audio_url || '';
+  try {
+    await db.run('DELETE FROM favorites WHERE user_id = ? AND video_url = ? AND audio_url = ?', [
+      req.userId,
+      v,
+      a,
+    ]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Delete favorite error:', err.message);
+    res.status(500).json({ error: 'Failed to delete favorite' });
   }
-  // Upsert: insert new or update existing latest entry
-  db.get(
-    'SELECT id FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ? ORDER BY watched_at DESC LIMIT 1',
-    [req.userId, video_url, audio_url],
-    (err, row) => {
-      if (err) return res.status(500).json({ error: err.message });
-      if (row) {
-        db.run(
-          'UPDATE history SET progress = ?, duration = ?, watched_at = CURRENT_TIMESTAMP WHERE id = ?',
-          [progress || 0, duration || 0, row.id],
-          function(err2) {
-            if (err2) return res.status(500).json({ error: err2.message });
-            res.json({ updated: true });
-          }
-        );
-      } else {
-        db.run(
-          'INSERT INTO history (user_id, video_url, audio_url, title, category_id, progress, duration) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [req.userId, video_url, audio_url, title || '', category_id || '', progress || 0, duration || 0],
-          function(err2) {
-            if (err2) return res.status(500).json({ error: err2.message });
-            res.json({ id: this.lastID });
-          }
-        );
-      }
-    }
-  );
 });
 
-// Get all recent progress (for cross-device sync)
-router.get('/progress/all', (req, res) => {
-  db.all(
-    'SELECT video_url, audio_url, title, category_id, progress, duration, watched_at FROM history WHERE user_id = ? ORDER BY watched_at DESC LIMIT 20',
-    [req.userId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(rows || []);
+// ---- History (upsert) ----
+router.post('/history', express.json(), requireUser, sanitizeBody, async (req, res) => {
+  const { video_url, audio_url, title, category_id, progress = 0, duration = 0 } = req.body || {};
+  const v = video_url || '';
+  const a = audio_url || '';
+  if (!validUrl(v) && !validUrl(a)) {
+    return res.status(400).json({ error: 'video_url or audio_url required' });
+  }
+  try {
+    const existing = await db.get(
+      'SELECT id FROM history WHERE user_id = ? AND video_url = ? AND audio_url = ?',
+      [req.userId, v, a]
+    );
+    if (existing) {
+      await db.run(
+        'UPDATE history SET title = ?, category_id = ?, progress = ?, duration = ?, watched_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [title || '', category_id || '', progress, duration, existing.id]
+      );
+    } else {
+      await db.run(
+        'INSERT INTO history (user_id, video_url, audio_url, title, category_id, progress, duration) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [req.userId, v, a, title || '', category_id || '', progress, duration]
+      );
     }
-  );
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Add history error:', err.message);
+    res.status(500).json({ error: 'Failed to add history' });
+  }
+});
+
+router.get('/history', requireUser, async (req, res) => {
+  try {
+    const rows = await db.all(
+      'SELECT * FROM history WHERE user_id = ? ORDER BY watched_at DESC LIMIT 50',
+      [req.userId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Get history error:', err.message);
+    res.status(500).json({ error: 'Failed to load history' });
+  }
+});
+
+// ---- Stats ----
+router.get('/stats', requireUser, async (req, res) => {
+  try {
+    const [fav, pls, hist, last] = await Promise.all([
+      db.get('SELECT COUNT(*) AS n FROM favorites WHERE user_id = ?', [req.userId]),
+      db.get('SELECT COUNT(*) AS n FROM playlists WHERE user_id = ?', [req.userId]),
+      db.get('SELECT COUNT(*) AS n FROM history WHERE user_id = ?', [req.userId]),
+      db.get(
+        'SELECT title, watched_at FROM history WHERE user_id = ? ORDER BY watched_at DESC LIMIT 1',
+        [req.userId]
+      ),
+    ]);
+    res.json({
+      favorites: fav?.n || 0,
+      playlists: pls?.n || 0,
+      history: hist?.n || 0,
+      lastWatched: last ? { title: last.title, at: last.watched_at } : null,
+    });
+  } catch (err) {
+    console.error('Stats error:', err.message);
+    res.status(500).json({ error: 'Failed to load stats' });
+  }
 });
 
 module.exports = router;

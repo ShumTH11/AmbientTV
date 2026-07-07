@@ -80,3 +80,14 @@ backend/media/audio/
 web/media/
 backend/public/media/
 backend/media/video/
+
+# Temp / junk artifacts that must never be committed
+_junk_api_bracket/
+cookies.txt
+thumb_test.jpg
+_test_*
+_tmp_*
+
+# --- Vercel ---
+.vercel/
+.env.local

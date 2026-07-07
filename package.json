@@ -1,0 +1,22 @@
+{
+  "name": "ambienttv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AmbientTV — root manifest for Vercel. Includes backend dependencies used by the serverless API (api/[[...]].js). Frontend builds from ./web.",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "@vercel/blob": "^0.27.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "validator": "^13.15.35"
+  }
+}

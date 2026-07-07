@@ -1,10 +1,9 @@
 {
-  "version": 2,
-  "installCommand": "cd web && npm install",
-  "buildCommand": "cd web && npm run build",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd web && npm install && npm run build",
   "outputDirectory": "web/dist",
-  "nodeVersion": "20.x",
+  "framework": "vite",
   "rewrites": [
-    { "source": "/((?!api/|media/).*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
