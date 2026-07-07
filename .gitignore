@@ -74,3 +74,9 @@ backend/media/uploads/
 web-legacy/
 ux_gap_closure_*.md
 web/task_auth_tests_*.md
+
+# Local media assets (served from disk, not in git)
+backend/media/audio/
+web/media/
+backend/public/media/
+backend/media/video/
