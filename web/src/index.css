@@ -7,11 +7,35 @@
    Accent colors are overridden at runtime by ThemeContext
    (see src/context/ThemeContext.tsx) per active category.
    ============================================================ */
+/* ============================================================
+   Animatable accent channels
+   Accent colors are split into registered RGB channels so that
+   gradients / glass tints cross-fade smoothly (over ~0.7s) when the
+   active category (carousel) or user accent changes — instead of
+   snapping to the new color. ThemeContext sets the *-r/-g/-b channels;
+   every `rgb(var(--accent)/x)` usage below recomputes each frame.
+   ============================================================ */
+@property --accent-r     { syntax: '<number>'; inherits: true; initial-value: 125; }
+@property --accent-g     { syntax: '<number>'; inherits: true; initial-value: 211; }
+@property --accent-b     { syntax: '<number>'; inherits: true; initial-value: 252; }
+@property --accent-soft-r { syntax: '<number>'; inherits: true; initial-value: 186; }
+@property --accent-soft-g { syntax: '<number>'; inherits: true; initial-value: 230; }
+@property --accent-soft-b { syntax: '<number>'; inherits: true; initial-value: 253; }
+@property --accent-glow-r { syntax: '<number>'; inherits: true; initial-value: 14;  }
+@property --accent-glow-g { syntax: '<number>'; inherits: true; initial-value: 165; }
+@property --accent-glow-b { syntax: '<number>'; inherits: true; initial-value: 233; }
+
 :root {
-  /* Default (neutral night) accent */
-  --accent: 125 211 252;        /* #7dd3fc sky */
-  --accent-soft: 186 230 253;   /* #bae6fd */
-  --accent-glow: 14 165 233;    /* #0ea5e9 */
+  /* Accent is derived from the animatable channels defined above. */
+  --accent: var(--accent-r) var(--accent-g) var(--accent-b);
+  --accent-soft: var(--accent-soft-r) var(--accent-soft-g) var(--accent-soft-b);
+  --accent-glow: var(--accent-glow-r) var(--accent-glow-g) var(--accent-glow-b);
+
+  /* Smoothly interpolate accent channels when a preset/theme switches */
+  transition:
+    --accent-r 700ms ease,      --accent-g 700ms ease,      --accent-b 700ms ease,
+    --accent-soft-r 700ms ease, --accent-soft-g 700ms ease, --accent-soft-b 700ms ease,
+    --accent-glow-r 700ms ease, --accent-glow-g 700ms ease, --accent-glow-b 700ms ease;
 
   --surface: 10 10 16;          /* #0a0a10 */
   --surface-raised: 22 22 30;   /* #16161e */

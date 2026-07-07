@@ -5,17 +5,99 @@
 //
 // @libsql/client is used for BOTH modes so the code path is identical and there is no
 // native `sqlite3` build step required on Vercel.
+//
+// IMPORTANT (serverless safety): the client and schema are initialized *lazily* and
+// *non-fatally*. On Vercel the build/output directory is read-only, so a local file
+// DB must live in /tmp. If initialization fails for any reason we keep the module
+// loadable (healthy = false) so that routes that don't need the DB — e.g. /api/catalog
+// and /api/health — keep working instead of crashing the whole function with a 500.
 
-const { createClient } = require('@libsql/client');
 const path = require('path');
+const fs = require('fs');
 
 const isTurso = !!process.env.TURSO_DATABASE_URL;
-const url = process.env.TURSO_DATABASE_URL || ('file:' + path.join(__dirname, 'data', 'users.db'));
+const onVercel = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+// Resolve the database URL:
+//   - Turso (HTTP client, no native binary) when configured
+//   - /tmp on Vercel (writable, ephemeral)
+//   - repo data/ folder locally / on Railway (persistent)
+let url;
+if (process.env.TURSO_DATABASE_URL) {
+  url = process.env.TURSO_DATABASE_URL;
+} else if (onVercel) {
+  url = 'file:/tmp/ambienttv_users.db';
+} else {
+  url = 'file:' + path.join(__dirname, 'data', 'users.db');
+}
 const authToken = process.env.TURSO_AUTH_TOKEN;
 
-const client = createClient(authToken ? { url, authToken } : { url });
+let createClient = null;
+let client = null;
+let healthy = false;
+let ready = Promise.resolve();
 
-let healthy = true;
+function loadLibsql() {
+  if (createClient) return createClient;
+  try {
+    createClient = require('@libsql/client').createClient;
+  } catch (e) {
+    console.error('[db] cannot load @libsql/client:', e && e.message);
+    createClient = null;
+  }
+  return createClient;
+}
+
+function initClient() {
+  if (client) return;
+  const factory = loadLibsql();
+  if (!factory) {
+    healthy = false;
+    return;
+  }
+  try {
+    client = authToken ? factory({ url, authToken }) : factory({ url });
+  } catch (e) {
+    console.error('[db] createClient failed:', e && e.message);
+    client = null;
+    healthy = false;
+    return;
+  }
+  // Make sure the parent directory exists for local/Railway file: URLs.
+  if (url.startsWith('file:') && !onVercel) {
+    try {
+      fs.mkdirSync(path.dirname(url.slice(5)), { recursive: true });
+    } catch (_) {
+      /* ignore */
+    }
+  }
+  // Apply schema. On failure we mark unhealthy but DO NOT rethrow — the module
+  // must stay loadable so /api/catalog continues to work.
+  ready = (async () => {
+    for (const stmt of SCHEMA) {
+      await client.execute(stmt);
+    }
+    healthy = true;
+  })().catch((e) => {
+    healthy = false;
+    console.error('[db] schema init failed (continuing without persistence):', e && e.message);
+  });
+}
+
+async function ensureInit() {
+  if (!client) initClient();
+  if (!client) {
+    const err = new Error('database unavailable');
+    err.statusCode = 503;
+    throw err;
+  }
+  await ready;
+  if (!healthy) {
+    const err = new Error('database unavailable');
+    err.statusCode = 503;
+    throw err;
+  }
+}
 
 // Convert a libSQL ResultSet into an array of plain objects keyed by column name.
 // libSQL may return rows as positional arrays or as objects depending on the driver,
@@ -37,7 +119,7 @@ function toObjects(result) {
 }
 
 async function run(sql, params = []) {
-  await ready;
+  await ensureInit();
   const result = await client.execute({ sql, args: params });
   return {
     lastID: Number(result.lastInsertRowid != null ? result.lastInsertRowid : 0),
@@ -46,20 +128,20 @@ async function run(sql, params = []) {
 }
 
 async function get(sql, params = []) {
-  await ready;
+  await ensureInit();
   const result = await client.execute({ sql, args: params });
   return toObjects(result)[0] || null;
 }
 
 async function all(sql, params = []) {
-  await ready;
+  await ensureInit();
   const result = await client.execute({ sql, args: params });
   return toObjects(result);
 }
 
-async function close(cb) {
+function close(cb) {
   try {
-    await client.close();
+    if (client) client.close();
     healthy = false;
   } catch (e) {
     /* ignore */
@@ -118,16 +200,6 @@ const SCHEMA = [
     UNIQUE(playlist_id, video_url, audio_url)
   )`,
 ];
-
-const ready = (async () => {
-  for (const stmt of SCHEMA) {
-    await client.execute(stmt);
-  }
-})().catch((e) => {
-  healthy = false;
-  console.error('[db] schema init failed:', e && e.message);
-  throw e;
-});
 
 const db = { run, get, all, close, isTurso };
 Object.defineProperty(db, 'open', {

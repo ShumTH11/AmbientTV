@@ -67,11 +67,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     [activeCategory, userAccent]
   );
 
+  // Write an RGB triplet ("r g b") into the three animatable channels
+  // (--x-r/-g/-b). Because those channels are registered via @property and
+  // transitioned on :root, gradients/glass cross-fade to the new color
+  // instead of snapping.
+  const setChannels = (root: HTMLElement, name: string, triplet: string) => {
+    const [r, g, b] = triplet.split(/\s+/).map((n) => Math.round(Number(n)));
+    root.style.setProperty(`--${name}-r`, String(r));
+    root.style.setProperty(`--${name}-g`, String(g));
+    root.style.setProperty(`--${name}-b`, String(b));
+  };
+
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty('--accent', preset.accent);
-    root.style.setProperty('--accent-soft', preset.accentSoft);
-    root.style.setProperty('--accent-glow', preset.glow);
+    setChannels(root, 'accent', preset.accent);
+    setChannels(root, 'accent-soft', preset.accentSoft);
+    setChannels(root, 'accent-glow', preset.glow);
     root.dataset.theme = mode;
   }, [preset, mode]);
 
