@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "installCommand": "cd web && npm install",
+  "buildCommand": "cd web && npm run build",
+  "outputDirectory": "web/dist",
+  "nodeVersion": "20.x",
+  "rewrites": [
+    { "source": "/((?!api/|media/).*)", "destination": "/index.html" }
+  ]
+}
