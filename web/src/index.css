@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   AmbientTV — Design Tokens & Theming
+   Accent colors are overridden at runtime by ThemeContext
+   (see src/context/ThemeContext.tsx) per active category.
+   ============================================================ */
+:root {
+  /* Default (neutral night) accent */
+  --accent: 125 211 252;        /* #7dd3fc sky */
+  --accent-soft: 186 230 253;   /* #bae6fd */
+  --accent-glow: 14 165 233;    /* #0ea5e9 */
+
+  --surface: 10 10 16;          /* #0a0a10 */
+  --surface-raised: 22 22 30;   /* #16161e */
+  --ink: 226 226 226;           /* #e2e2e2 */
+  --ink-soft: 148 163 184;      /* #94a3b8 */
+  --ink-faint: 71 85 105;       /* #475569 */
+}
+
+/* ============================================================
+   Light theme — overrides surface/ink + glass for day use.
+   The immersive Player stays dark by design.
+   ============================================================ */
+[data-theme='light'] {
+  --surface: 244 246 250;       /* #f4f6fa */
+  --surface-raised: 255 255 255;
+  --ink: 15 23 42;              /* #0f172a */
+  --ink-soft: 71 85 105;        /* #475569 */
+  --ink-faint: 148 163 184;     /* #94a3b8 */
+}
+
+[data-theme='light'] body {
+  background: rgb(var(--surface));
+  color: rgb(var(--ink));
+}
+
+[data-theme='light'] .glass {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 32px -8px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+[data-theme='light'] .glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 12px 48px -10px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='light'] .glass-subtle {
+  background: rgba(15, 23, 42, 0.03);
+  border-color: rgba(15, 23, 42, 0.06);
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent-glow) / 0.3);
+}
+
+[data-theme='light'] .noise-overlay {
+  opacity: 0.02;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: rgb(var(--surface));
+  color: rgb(var(--ink));
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.6s ease;
+}
+
+#root {
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+/* ============================================================
+   Glass system
+   ============================================================ */
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 48px -10px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
+  }
+
+  /* Accent-tinted radial glow used behind hero / cards */
+  .accent-glow-layer {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      rgb(var(--accent-glow) / 0.22),
+      transparent 70%
+    );
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      rgb(var(--accent-soft)),
+      rgb(var(--accent))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@layer utilities {
+  .accent-ring {
+    box-shadow: 0 0 0 1px rgb(var(--accent-glow) / 0.4),
+      0 0 32px -6px rgb(var(--accent-glow) / 0.5);
+  }
+  .noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+    mask-image: linear-gradient(to bottom, black 60%, transparent);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom scrollbar (kept subtle) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent-glow) / 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent-glow) / 0.4);
+}
+
+/* Reduced motion: disable heavy animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+::selection {
+  background: rgb(var(--accent-glow) / 0.3);
+  color: #fff;
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Tap highlight off for cleaner mobile feel */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Skip link (visually hidden until focused) */
+.skip-link {
+  position: fixed;
+  top: -200px;
+  left: 1rem;
+  z-index: 500;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.75rem;
+  background: rgb(var(--accent-glow));
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Skip layout/paint for offscreen grids → faster rendering of long lists */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}

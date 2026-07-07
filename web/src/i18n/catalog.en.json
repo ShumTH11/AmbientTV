@@ -1,0 +1,76 @@
+{
+  "categories": {
+    "nature": {
+      "name": "Nature",
+      "description": "Forests, mountains, lakes, waterfalls — pure nature in 4K"
+    },
+    "rain": {
+      "name": "Rain & Cozy",
+      "description": "Rainy days, thunderstorms, cozy window views"
+    },
+    "lofi": {
+      "name": "Lofi & Study",
+      "description": "Lofi hip hop, study beats, cozy rooms for focus"
+    },
+    "cyberpunk": {
+      "name": "Cyberpunk & Neon",
+      "description": "Neon cities, cyberpunk streets, synthwave vibes"
+    },
+    "space": {
+      "name": "Space & Cosmos",
+      "description": "Galaxies, nebulae, moon surfaces, star fields"
+    },
+    "japan": {
+      "name": "Japan & Anime",
+      "description": "Tokyo streets, Kyoto temples, anime aesthetics"
+    },
+    "vaporwave": {
+      "name": "Vaporwave & Retro",
+      "description": "Vaporwave aesthetics, retro futurism, 80s nostalgia"
+    }
+  },
+  "scenes": {
+    "nature": {
+      "0": "Forest Stream 4K — Deep Meditation",
+      "1": "Mountain Lake 4K — Physical Therapy",
+      "2": "Sunset Meadow 4K — Anti Stress",
+      "3": "Ocean Waves 4K — Tone Poetry",
+      "4": "Waterfall Canyon 4K — The Healing Lake"
+    },
+    "rain": {
+      "0": "Rainy Tokyo Night — Deep Sleep",
+      "1": "Thunderstorm — Deep Sleep B",
+      "2": "Cozy Rain Window — Air Fan Deep",
+      "3": "Night Rain Street — Deep Meditation"
+    },
+    "lofi": {
+      "0": "Lo-fi beats — Dawn",
+      "1": "Lo-fi beats — Study",
+      "2": "Lo-fi beats — Café",
+      "3": "Lo-fi beats — Rainy window",
+      "4": "Lo-fi beats — Night code"
+    },
+    "cyberpunk": {
+      "0": "Tokyo neon — Synth rain",
+      "1": "Night neon — Soundwave",
+      "2": "Hong Kong neon — Drone",
+      "3": "Neon street — Darkwave"
+    },
+    "space": {
+      "0": "Moon surface 4K — Ambient",
+      "1": "Lunar base 4K — Ambient",
+      "2": "Nebula — Drone",
+      "3": "Black hole — Soundscape",
+      "4": "Star field — Ambient"
+    },
+    "japan": {
+      "0": "Tokyo night — Synthwave",
+      "1": "Kyoto — Pan flute",
+      "2": "Anime sunset — Lo-fi"
+    },
+    "vaporwave": {
+      "0": "80s sunset — Retrowave",
+      "1": "Neon grid — Retro funk"
+    }
+  }
+}

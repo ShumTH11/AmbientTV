@@ -66,3 +66,11 @@ backend/data/*.db-wal
 # Scraper temp files
 temp_coverr.html
 
+
+# --- local/runtime artifacts (GitLab migration) ---
+backend/media/uploads/
+*.err
+*.tsbuildinfo
+web-legacy/
+ux_gap_closure_*.md
+web/task_auth_tests_*.md

@@ -104,6 +104,7 @@ app.use('/api/admin/health', healthRouter);
 // Admin panel (password-protected web UI)
 app.use('/admin', express.static(path.join(__dirname, 'public', 'admin')));
 app.use('/api/admin', adminRouter);
+app.use('/api/uploads', require('./routes/uploads'));
 
 // Web app (browser version)
 // Support both Docker layout (/app/web) and local dev layout (/project/web)

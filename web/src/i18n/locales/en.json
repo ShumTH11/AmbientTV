@@ -1,0 +1,174 @@
+{
+  "common": {
+    "appName": "AmbientTV",
+    "close": "Close",
+    "open": "Open",
+    "play": "Play",
+    "pause": "Pause",
+    "next": "Next",
+    "prev": "Previous",
+    "add": "Add",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading…",
+    "search": "Search",
+    "searchPlaceholder": "Search:",
+    "language": "Language",
+    "russian": "Русский",
+    "english": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "history": "History",
+    "playlists": "Playlists",
+    "profile": "Profile",
+    "video": "Video",
+    "videoSources": "Video sources"
+  },
+  "sources": {
+    "youtube": "YouTube",
+    "rutube": "Rutube",
+    "uploads": "Uploads",
+    "custom": "Custom",
+    "presets": "Collection"
+  },
+  "home": {
+    "title": "Pick a mood",
+    "subtitle": "Build the atmosphere — music, sounds and visuals for every mood.",
+    "suggestionTitle": "Picked for you",
+    "videos": "videos",
+    "suggested": "Picked for you",
+    "explore": "Explore"
+  },
+  "hero": {
+    "subtitle": "Ambient Experience",
+    "title": "Immerse in the atmosphere",
+    "desc": "Looped videos with synced music. Nature, lofi, cyberpunk, space — pick your mood.",
+    "cta": "Start exploring",
+    "build": "Build atmosphere"
+  },
+  "custom": {
+    "title": "Custom mix",
+    "subtitle": "Pair any video with any audio. Mix forest ambience with rain, or city lights with binaural beats.",
+    "video": "Video",
+    "audio": "Audio",
+    "visual": "Visual",
+    "noVisual": "No visual",
+    "noVideo": "No video",
+    "noAudio": "No audio",
+    "noSelection": "— not selected",
+    "pickAtLeastOne": "Pick a video or audio",
+    "emptySource": "No items in this source",
+    "combo": "Combination",
+    "buildButton": "Start mix",
+    "footerHint": "Auto-advance works between scenes"
+  },
+  "player": {
+    "ariaLabel": "Player",
+    "source": "Source",
+    "nowPlaying": "Now playing",
+    "paused": "Paused",
+    "ariaPlay": "Play",
+    "ariaPause": "Pause",
+    "ariaClose": "Close player",
+    "ariaPrev": "Previous scene",
+    "ariaNext": "Next scene",
+    "ariaShuffle": "Shuffle",
+    "ariaRepeat": "Auto-advance to next scene",
+    "ariaSleep": "Sleep timer",
+    "ariaFullscreen": "Fullscreen",
+    "ariaMute": "Unmute",
+    "ariaUnmute": "Mute",
+    "ariaFavorite": "Add to favorites",
+    "ariaUnfavorite": "Remove from favorites",
+    "ariaSeek": "Seek",
+    "ariaVolume": "Volume",
+    "addedToFavorites": "Added to favorites",
+    "removedFromFavorites": "Removed from favorites",
+    "vizMode": "Visualizer mode"
+  },
+  "favorites": {
+    "desc": "Scenes you marked with a heart",
+    "empty": "Empty so far. Open any category or source and tap ❤ on a scene you like.",
+    "added": "Added to favorites",
+    "removed": "Removed from favorites",
+    "add": "Add to favorites",
+    "remove": "Remove from favorites"
+  },
+  "history": {
+    "desc": "Recently watched",
+    "empty": "You haven't watched anything yet. Time to immerse in the atmosphere."
+  },
+  "playlist": {
+    "created": "Playlist created",
+    "back": "All playlists",
+    "placeholder": "Playlist name…",
+    "deleted": "Playlist deleted",
+    "add": "Add to playlist",
+    "removeItem": "Remove from playlist",
+    "createFirst": "Create a playlist first",
+    "empty": "Add scenes from categories or sources by tapping ➕ on a card.",
+    "emptyFirst": "Create your first playlist to collect your favorite scenes.",
+    "added": "Added to",
+    "cloned": "Category copied to playlist"
+  },
+  "profile": {
+    "title": "Profile",
+    "guest": "Guest",
+    "login": "Sign in",
+    "register": "Register",
+    "logout": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "nameOptional": "Name (optional)",
+    "demoLogin": "Demo sign-in (local)",
+    "synced": "synced",
+    "syncedHint": "Synced with server",
+    "stats": "Stats",
+    "favorites": "Favorites",
+    "viewed": "Viewed",
+    "playlists": "Playlists",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "accent": "Accent",
+    "resetAccent": "Reset accent"
+  },
+  "external": {
+    "urlPlaceholderYouTube": "https://youtube.com/watch?v=...",
+    "urlPlaceholderRutube": "https://rutube.ru/play/...",
+    "titlePlaceholder": "Title (optional)",
+    "addButton": "Add",
+    "addHint": "Paste a link or ID — the scene will appear in this source. Add multiple and switch between them in the player.",
+    "empty": "Empty for now. Add a link above to start.",
+    "addedToSource": "Added to source",
+    "invalidUrl": "Couldn't parse the link/ID"
+  },
+  "uploads": {
+    "title": "Uploads",
+    "subtitle": "Upload your own files. They'll be available in the Uploads source.",
+    "dropOrClick": "Drop a file here or click to pick",
+    "supportedFormats": "MP3, WAV, OGG, M4A — up to 50 MB",
+    "uploaded": "Uploaded",
+    "image": "Image / GIF",
+    "imageHint": "images JPG/PNG/GIF/WEBP",
+    "hint": "Video MP4/WebM, audio MP3/WAV/OGG, ",
+    "deleting": "Deleting…",
+    "empty": "No uploaded files yet.",
+    "noAudio": "No audio",
+    "delete": "Delete",
+    "confirmDelete": "Delete \"{name}\"?"
+  },
+  "category": {
+    "clone": "Copy to playlist"
+  },
+  "loader": {
+    "loading": "Loading the atmosphere…"
+  },
+  "toast": {
+    "error": "Error"
+  }
+}
