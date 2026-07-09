@@ -1,15 +1,12 @@
 // Long-running process entrypoint for LOCAL development and Railway deployments.
-// On Vercel this file is NOT used — api/[[...]].js imports ./app instead.
-
+// On Vercel this file is NOT used - api/[[...]].js imports ./app instead.
 require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
 const app = require('./app');
 const db = require('./database');
 const cache = require('./cache');
-
 const PORT = process.env.PORT || 3000;
 let isShuttingDown = false;
 let serverInstance = null;
@@ -73,7 +70,7 @@ process.on('unhandledRejection', (reason) => {
 });
 
 serverInstance = app.listen(PORT, () => {
-  console.log(`AmbientTV backend running on http://localhost:${PORT} (${db.isTurso ? 'turso' : 'local-sqlite'})`);
+  console.log(`AmbientTV backend running on http://localhost:${PORT} (${db.isUpstash ? 'upstash (serverless)' : db.open ? 'in-memory' : 'unavailable'})`);
   console.log('  GET  /                      (web app)');
   console.log('  GET  /admin                 (admin panel)');
   console.log('  POST /api/auth/register     (register)');

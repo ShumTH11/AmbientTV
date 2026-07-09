@@ -841,4 +841,7 @@ function close(cb) {
 const db = { run, get, all, close, isUpstash: !!upstashUrl };
 Object.defineProperty(db, 'open', { enumerable: true, configurable: true, get: () => healthy });
 
+// Initialize store immediately on module load (so health checks work before first query)
+initStore();
+
 module.exports = db;
