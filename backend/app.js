@@ -9,12 +9,14 @@
 // Those belong to server.js (the long-running process entrypoint).
 
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const { strict, standard, generous } = require('./middleware/rate-limiter');
 
+const { strict, standard, generous } = require('./middleware/rate-limiter');
 const { requireAuth } = require('./middleware/auth');
+
 const catalogRouter = require('./routes/catalog');
 const searchRouter = require('./routes/search');
 const adminRouter = require('./routes/admin');
@@ -44,7 +46,7 @@ const corsOptions = {
     callback(new Error(`CORS blocked: origin ${origin} not in ALLOWED_ORIGINS`));
   },
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true,
 };
 
@@ -63,7 +65,7 @@ app.get('/api/health', (req, res) => {
   res.status(healthy ? 200 : 503).json({
     status: healthy ? 'ok' : 'degraded',
     timestamp: new Date().toISOString(),
-    mode: db.isTurso ? 'turso' : 'local-sqlite',
+    mode: db.isUpstash ? 'upstash (serverless)' : db.open ? 'in-memory' : 'unavailable',
     checks: {
       database: dbHealthy ? 'ok' : 'error',
       cache: cacheHealthy ? 'ok' : 'error',
